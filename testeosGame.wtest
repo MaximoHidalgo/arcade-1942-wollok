@@ -1,0 +1,9 @@
+import example.pepita
+
+describe "testeos del Zelda" {
+
+  test "primer test" {
+    //assert.equals(100, pepita.energy())
+  }
+
+}
