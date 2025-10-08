@@ -7,16 +7,8 @@
     }
 }
 */
-
+/*
 object desplazamientoMapa {
-    var property velocidadDesplazamiento = 1
     var property position = game.at(0,0)
-    var property image = "tile001.png"
-
-
-     method desplazarArriba() {
-        velocidadDesplazamiento += 1
-        return game.at(0, velocidadDesplazamiento)
-    }
-
-}
+    var property image = "clideo_editor_c6939e633ac745278f101b40c8f8de06.gif"
+}*/
