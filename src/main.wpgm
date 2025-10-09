@@ -5,13 +5,14 @@ import jugador.*
 program Juego1942PC {
 
 	
-	game.boardGround("fondo.gif")
+	game.boardGround("panoramica1.gif")
 	game.width(10)
-	game.height(10)
+	game.height(8)
 	game.addVisualCharacter(jugador)
 
-/*
 
+
+/*
 	method addVisualCharacter(visual) {
     self.addVisual(visual)
     keyboard.up().onPressDo({ 
