@@ -1,36 +1,33 @@
 import wollok.game.*
 import mapa.*
 import jugador.*
+import enemigos.*
 
 program Juego1942PC {
-
 	
 	game.boardGround("panoramica1.gif")
 	game.width(10)
 	game.height(8)
 	game.addVisualCharacter(jugador)
-
-
-
-/*
-	method addVisualCharacter(visual) {
-    self.addVisual(visual)
-    keyboard.up().onPressDo({ 
-      if(visual.position().y() < self.height()-1) visual.position(visual.position().up(1)) })
-    keyboard.down().onPressDo({ 
-      if(visual.position().y() > 0) visual.position(visual.position().down(1)) })
-    keyboard.right().onPressDo({ 
-      if (visual.position().x() < self.width()-1) visual.position(visual.position().right(1)) })
-    keyboard.left().onPressDo({ 
-      if (visual.position().x() > 0) visual.position(visual.position().left(1)) })
-}*/
-
-	game.onCollideDo(jugador, jugador.recibirDanio())
 	
+	
+
 	keyboard.left().onPressDo({jugador.cambiarImagen("jugadorIzqu.png")})
 	keyboard.right().onPressDo({jugador.cambiarImagen("jugadorDer.png")})
 	keyboard.up().onPressDo({jugador.cambiarImagen("jugadorBase.png")})
 	keyboard.down().onPressDo({jugador.cambiarImagen("jugadorBase.png")})
+
+	keyboard.x().onPressDo{jugador.ataqueReg()} 
+
+	game.onTick(5000, "spawEnemigos", {
+		const enemigo = new Enemigo(vidas = 1, danio = 1, position = game.at(4,7), image = "sprite.png")
+		enemigo.spawnEnemigo()
+		game.onTick(5000, "moverEnemigo", { enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
+		game.onCollideDo(enemigo, {elemento => elemento.recibirDanioDeJugador(Proyectiles.danioProyectil())})
+		game.onCollideDo(jugador, {elemento => elemento.hacerDanio(jugador)})
+	})
+
+
 	
 //Ejecución:
 	game.start()
