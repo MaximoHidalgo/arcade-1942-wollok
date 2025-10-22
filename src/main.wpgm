@@ -23,7 +23,7 @@ program Juego1942PC {
 		const enemigo = new Enemigo(vidas = 1, danio = 1, position = game.at(4,7), image = "sprite.png")
 		enemigo.spawnEnemigo()
 		game.onTick(5000, "moverEnemigo", { enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
-		game.onCollideDo(enemigo, {elemento => elemento.recibirDanioDeJugador(Proyectiles.danioProyectil())})
+		game.onCollideDo(enemigo, {elemento => enemigo.recibirDanioDeJugador(elemento.danioProyectil())})
 		game.onCollideDo(jugador, {elemento => elemento.hacerDanio(jugador)})
 	})
 
