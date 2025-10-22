@@ -1,9 +1,12 @@
 import wollok.game.*
+import controladorDeNivel.*
+import enemigos.*
+import estadosJuego.*
+import juego.*
 import main.*
 import mapa.*
-import pantallaInicio.*
-import enemigos.*
-import juego.*
+import menu.*
+import niveles.*
 
 object jugador {
   var property position = game.at(5,1)
@@ -17,12 +20,11 @@ object jugador {
     }
     
   method image() = img
-
-
+  
   method ataqueReg(){
-    const proyectil = new Proyectiles(position = self.position(), danioProyectil = 1, image = "proyectiles.png")
+    const proyectil = new Proyectiles(position = self.position(), danioProyectil = 1)
     proyectil.spawnDisparo(self.position())
-    game.onTick(500, "ataque", { proyectil.avanzar() ; proyectil.comprobarLimiteMapa()})
+    game.onTick(400, "ataque", { proyectil.avanzar() ; proyectil.comprobarLimiteMapa()})
   }
   
   method recibirDanio(danio){
@@ -46,37 +48,38 @@ object jugador {
 
 class Proyectiles {
   //Atributos:
-  var property position = game.origin()
-  var property danioProyectil = 1
+  var property position
+  var property danioProyectil
   var property image = "proyectiles.png"
 
-  method danioProyectil() = danioProyectil
-  
   //Metodo para desplazar disparo:
   method spawnDisparo(posicion){
     //Se añade la visual:
     game.addVisual(self)
     //El proyectil empieza por la posición del jugador:
     self.position(posicion)
-    }
+  }
   
   //Metodo que remueve los disparos:
   method remover(){	
 		game.removeVisual(self)
-		//game.removeTickEvent("ataque")
-    }
+  }
   
   method comprobarLimiteMapa(){
     if(self.position().y() > game.height() -1){  //Limite arriba
     self.remover()}
-    }
+  }
 
 	//Metodo de avance del disparo:
 	method avanzar(){
     self.position(self.position().up(1))
-    }	
+    game.onCollideDo(self, {elemento => if(elemento.image() == "enemigo.png"){
+      self.remover()
+      elemento.recibirDanioDeJugador(self.danioProyectil())}
+    })
+  }	
   
   method poderAtaque(enemigo){
-        enemigo.recibirDanioDeJugador(danioProyectil)
-    }
+    enemigo.recibirDanioDeJugador(danioProyectil)
   }
+}

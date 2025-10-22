@@ -1,9 +1,12 @@
 import wollok.game.*
-import main.*
-import pantallaInicio.*
-import jugador.*
+import controladorDeNivel.*
 import enemigos.*
+import estadosJuego.*
 import juego.*
+import jugador.*
+import main.*
+import menu.*
+import niveles.*
 
 object mapa {
     var property position = game.at(0,0)

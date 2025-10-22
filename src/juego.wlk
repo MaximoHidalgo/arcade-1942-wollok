@@ -1,9 +1,12 @@
 import wollok.game.*
+import controladorDeNivel.*
+import enemigos.*
+import estadosJuego.*
+import jugador.*
 import main.*
 import mapa.*
-import jugador.*
-import enemigos.*
-import pantallaInicio.*
+import menu.*
+import niveles.*
 
 //------------------------------
 //------gestor del juego--------
