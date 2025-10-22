@@ -33,7 +33,7 @@ Diagrama:
 [Proyectiles]->[Enemigos]
 [jugador]-.->[Proyectiles]
 
-<img width="1118" height="487" alt="image" src="https://github.com/user-attachments/assets/6e424451-41d6-49a8-9a8c-770de1b80163" />
+<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/6e424451-41d6-49a8-9a8c-770de1b80163" />
 
 
 
