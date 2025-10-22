@@ -19,7 +19,22 @@ Presentar diferentes ideas de juegos y un primer prototipo sencillo que implemen
 Este prototipo demuestra los primeros pasos del desarrollo y sirve como base para incorporar futuras ideas. Entre los objetivos se encuentra intentar incorporar otras mecanicas, jefes, mas armas o herramientas y mejorar las interfaces para el jugador.
 
 
----
+# Entrega 2 - Lógica principal funcionando
+
+Diagrama: 
+[≪object≫;jugador|position; vidas; puntos; img |cambiarImagen(nuevaImagen);image();ataqueReg();recibirDanio(danio); morir()]
+
+[Proyectiles|position; danioProyectil; image|cambiarImagen(nuevaImagen);danioProyectil();spawnDisparo(posicion);remover();comprobarLimiteMapa();avanzar();poderAtaque(enemigo)]
+
+[Enemigos|position; vida; image; danio|spawnEnemigo(position);movimiento()hacerDanio();remover();comprobarLimiteMapa();comprobarMorir();recibirDanioDelJugador]
+
+// Relaciones
+[jugador]<->[Enemigos]
+[Proyectiles]->[Enemigos]
+[jugador]-.->[Proyectiles]
+
+<img width="1118" height="487" alt="image" src="https://github.com/user-attachments/assets/6e424451-41d6-49a8-9a8c-770de1b80163" />
+
 
 
 # 🧠 Grupo El ultimo paradigma
