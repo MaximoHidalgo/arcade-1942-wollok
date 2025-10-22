@@ -1,14 +1,16 @@
-/*object fondo {
-    var property position = game.at(0, 0)
-    var property velocidadDesplazamiento = 1
+import wollok.game.*
+import main.*
+import pantallaInicio.*
+import jugador.*
+import enemigos.*
+import juego.*
 
-    method desplazarArriba() {
-        self.position = game.at(self.position.x, self.position.y - velocidadDesplazamiento)
+object mapa {
+    var property position = game.at(0,0)
+    var property image = ""
+
+    method visualizarCon(img) {
+        image = img 
+        game.addVisual(self)
     }
 }
-*/
-/*
-object desplazamientoMapa {
-    var property position = game.at(0,0)
-    var property image = "clideo_editor_c6939e633ac745278f101b40c8f8de06.gif"
-}*/

@@ -4,19 +4,16 @@ import jugador.*
 
 class Enemigo {
   //Atributos:
-  var property vidas = 1
   var property position = game.at(4,10)
+  var property vidas = 1
   var property danio = 1
   var property image = "sprite.png"
 
-/*var property orientacion = 0
-  var property arriba = 0
-  var property abajo = 1
-  var property izquierda = 2
-  var property derecha = 3
-  */
-  //const aves = #{pepita, pepito, lila, agatha}
+
+  method terminarPersecucion(){}
   
+  method terminarSpawnCycle(){}
+
   method spawnEnemigo(){
     //Se añade la visual:
     game.addVisual(self)

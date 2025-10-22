@@ -1,6 +1,9 @@
 import wollok.game.*
+import main.*
 import mapa.*
-
+import pantallaInicio.*
+import enemigos.*
+import juego.*
 
 object jugador {
   var property position = game.at(5,1)
@@ -29,7 +32,11 @@ object jugador {
     return vidas
   }
   
-  method morir() {if (self.vidas() <= 0){game.stop()}}
+  method morir() {
+    if (self.vidas() <= 0){
+      menuInicio.derrota()
+    }
+  }
 
   //Cambiar por un gif del avion moviendose,
   //para poder dar la sensacion de que el avion se mueve
