@@ -19,8 +19,11 @@ program Juego1942PC {
 
 	keyboard.x().onPressDo{jugador.ataqueReg()} 
 
+	const posicionesX = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
 	game.onTick(5000, "spawEnemigos", {
-		const enemigo = new Enemigo(vidas = 1, danio = 1, position = game.at(4,7), image = "sprite.png")
+		const posicionXRandom = posicionesX.anyOne()
+		const enemigo = new Enemigo(vidas = 1, danio = 1, position = game.at(posicionXRandom,7), image = "sprite.png")
 		enemigo.spawnEnemigo()
 		game.onTick(5000, "moverEnemigo", { enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
 		game.onCollideDo(enemigo, {elemento => enemigo.recibirDanioDeJugador(elemento.danioProyectil())})
