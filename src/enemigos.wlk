@@ -22,19 +22,13 @@ class Enemigo {
     game.addVisual(self)
     game.sound("vueloEnemigo.wav").play()
     game.onCollideDo(self, {p => 
-    self.recibirDanioDeJugador(p.danioProyectil())})
+    self.recibirDanio(p.danioProyectil())})
   }
 
   method movimiento(){
-    
     self.position(self.position().down(1))
   }
-    
-  method hacerDanio(jugador){
-    jugador.recibirDanio(danio)
-  }
-
-    
+  
   method remover(){
     if(!removido){
       removido = true
@@ -51,10 +45,13 @@ class Enemigo {
   method comprobarLimiteMapa(){
   if(!removido && self.position().y() < 1){
     self.remover()
-  }
-}
+  }}
 
-  method recibirDanioDeJugador(danioProyectil){
+  method hacerDanio(jugador){
+    jugador.recibirDanio(danio)
+  }
+
+  method recibirDanio(danioProyectil){
     vidas = vidas - danioProyectil
     game.sound("impactoAEnemigo.wav").play()
     self.comprobarMorir()
