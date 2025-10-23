@@ -78,11 +78,11 @@ class Proyectiles {
     self.position(self.position().up(1))
     game.onCollideDo(self, {elemento => if(elemento.image() == "enemigo.png"){
       self.remover()
-      elemento.recibirDanioDeJugador(self.danioProyectil())}
+      elemento.recibirDanio(self.danioProyectil())}
     })
   }	
   
-  method poderAtaque(enemigo){
-    enemigo.recibirDanioDeJugador(danioProyectil)
+  method hacerDanio(enemigo){
+    enemigo.recibirDanio(danioProyectil)
   }
 }
