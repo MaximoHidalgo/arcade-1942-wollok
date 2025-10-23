@@ -36,7 +36,9 @@ object jugador {
   
   method morir() {
     if (self.vidas() <= 0){
-      menuInicio.derrota()
+      game.sound("sonidoMuerte.wav").play()
+      img = "jugadorPierde.png"
+      game.schedule(700,{menuInicio.derrota()})
     }
   }
 
@@ -56,6 +58,7 @@ class Proyectiles {
   method spawnDisparo(posicion){
     //Se añade la visual:
     game.addVisual(self)
+    game.sound("proyectil.mp3").play()
     //El proyectil empieza por la posición del jugador:
     self.position(posicion)
   }

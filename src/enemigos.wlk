@@ -15,20 +15,18 @@ class Enemigo {
   var property vidas = 1
   var property danio = 1
   var property image = "enemigo.png"
-
-
-  method terminarPersecucion(){}
-  
-  method terminarSpawnCycle(){}
+  var property removido = false
 
   method spawnEnemigo(){
     //Se añade la visual:
     game.addVisual(self)
+    game.sound("vueloEnemigo.wav").play()
     game.onCollideDo(self, {p => 
     self.recibirDanioDeJugador(p.danioProyectil())})
   }
 
   method movimiento(){
+    
     self.position(self.position().down(1))
   }
     
@@ -37,9 +35,11 @@ class Enemigo {
   }
 
     
-  method remover(){	
-		game.removeVisual(self)
-		//game.removeTickEvent("ataque")
+  method remover(){
+    if(!removido){
+      removido = true
+      game.removeVisual(self)
+    }
   }
 
   //Metodo morir:
@@ -49,12 +49,14 @@ class Enemigo {
   }
 
   method comprobarLimiteMapa(){
-    if(self.position().y() < 1){  
-    self.remover()}
+  if(!removido && self.position().y() < 1){
+    self.remover()
   }
+}
 
-    method recibirDanioDeJugador(danioProyectil){
+  method recibirDanioDeJugador(danioProyectil){
     vidas = vidas - danioProyectil
+    game.sound("impactoAEnemigo.wav").play()
     self.comprobarMorir()
   } 
 }

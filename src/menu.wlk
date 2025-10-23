@@ -26,6 +26,7 @@ object menuInicio {
 
     method pantallaDeCarga() {
         image = "carga3.png"
+        game.sound("sonidoStart.wav").play()
         game.schedule(700,{self.abandonarCargando()})
     }
 
@@ -50,7 +51,7 @@ object menuInicio {
     }
 
     method derrota() {
-        game.sound("sonido-derrota.mp3").play()
+        game.sound("sonidoFinalPartida.wav").play()
         nivelManager.limpieza()
         game.allVisuals().forEach({visual => game.removeVisual(visual)})
         image = "pantalla-derrota.png"

@@ -20,6 +20,7 @@ object nivel1 {
     method iniciar(){
         mapa.visualizarCon(img)
         game.addVisualCharacter(jugador)
+        game.sound("musicaNivel1.mp3").play()
         
         //Entradas Teclado
         keyboard.left().onPressDo({jugador.cambiarImagen("jugadorIzqu.png")})
@@ -38,13 +39,8 @@ object nivel1 {
         })
         
         game.onTick(1000, "moverEnemigo", {
-            enemigos.forEach(
-                {enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()
-                }
-            )
+            enemigos.forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
         })
-
-        //game.onCollideDo(jugador, {enemigo => enemigo.hacerDanio(jugador)})
 
         game.onCollideDo(jugador, {e =>if(e.image() == "enemigo.png"){
         e.hacerDanio(jugador)}})

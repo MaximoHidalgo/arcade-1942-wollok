@@ -28,14 +28,10 @@ object nivelManager {
     }
 
     method limpieza() {
-        //obstaculos.clear()
-        //actual.ost().stop() 
-        //Enemigo.terminarPersecucion()
-        //Enemigo.terminarSpawnCycle()
+        game.clear()
     }
 
     method terminarNivel() {
-        //managerItems.darleTodoAlPersonaje()
         self.limpieza()
         menuInicio.animacionCargando()
     }
