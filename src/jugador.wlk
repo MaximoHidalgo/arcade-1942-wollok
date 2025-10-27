@@ -22,7 +22,7 @@ object jugador {
   method image() = img
   
   method ataqueReg(){
-    const proyectil = new Proyectiles(position = self.position(), danioProyectil = 1)
+    const proyectil = new Proyectiles(position = self.position(), danio = 1)
     proyectil.spawnDisparo(self.position())
     game.onTick(400, "ataque", { proyectil.avanzar() ; proyectil.comprobarLimiteMapa()})
   }
@@ -51,7 +51,7 @@ object jugador {
 class Proyectiles {
   //Atributos:
   var property position
-  var property danioProyectil
+  var property danio
   var property image = "proyectiles.png"
 
   //Metodo para desplazar disparo:
@@ -61,11 +61,18 @@ class Proyectiles {
     game.sound("proyectil.mp3").play()
     //El proyectil empieza por la posición del jugador:
     self.position(posicion)
+   game.whenCollideDo(self, { otro =>
+      if (otro.image() == "enemigo.png") {
+        otro.recibirDanio(self.danio())
+        self.remover()
+      }
+    })
   }
   
   //Metodo que remueve los disparos:
   method remover(){	
 		game.removeVisual(self)
+    self.position(game.at(-100, -100))
   }
   
   method comprobarLimiteMapa(){
@@ -73,16 +80,14 @@ class Proyectiles {
     self.remover()}
   }
 
+
 	//Metodo de avance del disparo:
 	method avanzar(){
     self.position(self.position().up(1))
-    game.onCollideDo(self, {elemento => if(elemento.image() == "enemigo.png"){
-      self.remover()
-      elemento.recibirDanio(self.danioProyectil())}
-    })
+    
   }	
   
   method hacerDanio(enemigo){
-    enemigo.recibirDanio(danioProyectil)
+    enemigo.recibirDanio(danio)
   }
 }
