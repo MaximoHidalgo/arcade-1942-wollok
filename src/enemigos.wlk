@@ -42,11 +42,9 @@ class Enemigo {
       self.remover()}
   }
 
-  method comprobarLimiteMapa(){
-  if(!removido && self.position().y() < 1){
-    self.remover()
-  }}
-
+  
+method comprobarLimiteMapa() = 
+  self.position().y() > game.height() - 1 || self.position().y() < 0
   method hacerDanio(jugador){
     jugador.recibirDanio(danio)
   }
@@ -57,3 +55,4 @@ class Enemigo {
     self.comprobarMorir()
   } 
 }
+
