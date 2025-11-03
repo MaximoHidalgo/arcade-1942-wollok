@@ -27,13 +27,10 @@ object nivel1 {
         keyboard.right().onPressDo({jugador.cambiarImagen("jugadorDer.png")})
         keyboard.up().onPressDo({jugador.cambiarImagen("jugadorBase.png")})
         keyboard.down().onPressDo({jugador.cambiarImagen("jugadorBase.png")})
-        keyboard.x().onPressDo{jugador.ataqueReg()} 
-
-        const posicionesX = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-        game.onTick(3000, "spawEnemigos", {
-            const posicionXRandom = posicionesX.anyOne()
-            const enemigo = new Enemigo(vidas = 1, danio = 1, position = game.at(posicionXRandom,7), image = "enemigo.png")
+        keyboard.x().onPressDo{jugador.ataqueReg()}
+        
+        game.onTick(2000, "spawEnemigos", {
+            const enemigo = new Enemigo(vidas = 1, danio = 1, position = game.at(0.randomUpTo(game.width()),7), image = "enemigo.png")
             enemigo.spawnEnemigo()
             enemigos.add(enemigo)
         })
@@ -44,7 +41,7 @@ object nivel1 {
 
         game.onCollideDo(jugador, {e =>if(e.image() == "enemigo.png"){
         e.hacerDanio(jugador)}})
+
+        hud.dibujar()
     }
 }
-
-

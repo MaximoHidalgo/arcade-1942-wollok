@@ -39,9 +39,15 @@ class Enemigo {
   //Metodo morir:
   method comprobarMorir() {
     if (vidas <= 0) {
-      self.remover()}
+      self.remover()
+      jugador.sumarPuntos(100)
+      hud.actualizarPuntos(jugador.puntos())
+      cantPuntos.actualizar(jugador.puntos())
+      }
+    if (self.comprobarLimiteMapa()) {
+      self.remover()
+    }
   }
-
   
 method comprobarLimiteMapa() = 
   self.position().y() > game.height() - 1 || self.position().y() < 0
@@ -54,5 +60,5 @@ method comprobarLimiteMapa() =
     game.sound("impactoAEnemigo.wav").play()
     self.comprobarMorir()
   } 
-}
+} 
 

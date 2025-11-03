@@ -60,3 +60,49 @@ object menuInicio {
     }
 }
 
+
+object hud {
+
+    method dibujar() {
+        game.addVisual(barra)
+        game.addVisual(cantVida)
+        game.addVisual(cantPuntos)
+    }
+
+    method actualizarPuntos(puntos) {
+        game.say(jugador, "puntos: " + puntos)
+    }
+}
+
+object barra {
+    var property image = "barra.png"
+    var property position = game.at(0,7)
+}
+
+object cantVida {
+    var property image = "corazones3.png"
+    var property position = game.at(0,7)
+}
+
+object cantPuntos {
+    var property digits = []
+    var property position = game.origin()
+    //var property image = "puntos.png"
+
+    method actualizar(puntos) {
+        const texto = puntos.toString()
+
+        digits.forEach({ d => game.removeVisual(d) })
+        digits.clear()
+
+        texto.length().times({ i =>
+            const numero = texto.charAt(i - 1)
+            const digito = object {
+                var property image = numero + ".png"
+                var property position = game.at(5 + (i - 1), 7)
+            }
+            digits.add(digito)
+            game.addVisual(digito)
+        })
+    }
+}

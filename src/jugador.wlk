@@ -27,26 +27,36 @@ object jugador {
     game.onTick(400, "ataque", { proyectil.avanzar() ; proyectil.comprobarLimiteMapa()})
   }
   
+  
   method recibirDanio(danio){
     vidas = vidas - danio
-
-    if (vidas <= 0){self.morir()}
+    if (vidas == 2){
+      cantVida.image("corazones2.png") 
+    } else if (vidas == 1){
+     cantVida.image("corazones1.png") 
+    } else if (vidas <= 0){
+      cantVida.image("corazones0.png") 
+      self.morir()
+      }
     return vidas
   }
-  
+
   method morir() {
-    if (self.vidas() <= 0){
       game.sound("sonidoMuerte.wav").play()
       img = "jugadorPierde.png"
       game.schedule(700,{menuInicio.derrota()})
-    }
   }
+
+  method sumarPuntos(cantidad){
+    puntos = puntos + cantidad
+  } 
+
 
   //Cambiar por un gif del avion moviendose,
   //para poder dar la sensacion de que el avion se mueve
 }
 
-//Disparos del avion: // inherits Consumible
+//Disparos del avion:
 
 class Proyectiles {
   //Atributos:
