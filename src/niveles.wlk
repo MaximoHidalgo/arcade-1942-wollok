@@ -14,7 +14,7 @@ import menu.*
 
 
 object nivel1 {
-    var property img = "panoramica1.gif"
+    var property img = "videoMapa1.gif"
     var property enemigos = []
 
     method iniciar(){
@@ -53,9 +53,6 @@ object nivel1 {
 
         game.onCollideDo(jugador, {e =>if(e.esEnemigo()){
         e.hacerDanio(jugador)}})
-
-         /*game.onCollideDo(jugador, {e =>if(e.image() == "corazones0.png"){
-         e.hacerDanio(jugador)}}) */
 
         hud.dibujar()
     }

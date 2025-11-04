@@ -42,7 +42,6 @@ class Enemigo {
     if (vidas <= 0) {
       self.remover()
       jugador.sumarPuntos(100)
-      hud.actualizarPuntos(jugador.puntos())
       cantPuntos.actualizar(jugador.puntos())
       }
     if (self.comprobarLimiteMapa()) {

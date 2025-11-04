@@ -68,10 +68,6 @@ object hud {
         game.addVisual(cantVida)
         game.addVisual(cantPuntos)
     }
-
-    method actualizarPuntos(puntos) {
-        game.say(jugador, "puntos: " + puntos)
-    }
 }
 
 object barra {
