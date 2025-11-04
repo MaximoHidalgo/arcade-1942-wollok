@@ -16,6 +16,7 @@ class Enemigo {
   var property danio = 1
   var property image = "enemigo.png"
   var property removido = false
+  var property esEnemigo = true
 
   method spawnEnemigo(){
     //Se añade la visual:
@@ -49,8 +50,8 @@ class Enemigo {
     }
   }
   
-method comprobarLimiteMapa() = 
-  self.position().y() > game.height() - 1 || self.position().y() < 0
+method comprobarLimiteMapa() = self.position().y() > game.height() - 1 || self.position().y() < 0
+
   method hacerDanio(jugador){
     jugador.recibirDanio(danio)
   }
@@ -61,4 +62,6 @@ method comprobarLimiteMapa() =
     self.comprobarMorir()
   } 
 } 
+
+
 
