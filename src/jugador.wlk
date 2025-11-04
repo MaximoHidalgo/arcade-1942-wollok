@@ -72,11 +72,12 @@ class Proyectiles {
     //El proyectil empieza por la posición del jugador:
     self.position(posicion)
    game.whenCollideDo(self, { otro =>
-      if (otro.image() == "enemigo.png") {
+      if (otro.esEnemigo()) {
         otro.recibirDanio(self.danio())
         self.remover()
       }
     })
+   
   }
   
   //Metodo que remueve los disparos:
