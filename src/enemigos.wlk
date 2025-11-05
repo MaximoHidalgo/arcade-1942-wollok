@@ -61,6 +61,14 @@ method comprobarLimiteMapa() = self.position().y() > game.height() - 1 || self.p
     self.comprobarMorir()
   } 
 } 
+//Enemigo Pesado Cambiarle el Sprite
+class EnemigoPesado inherits Enemigo (vidas = 2, danio = 2, image = "jugadorBase.png") {
 
+method ataqueReg() {
+    const proyectilRival = new ProyectilRival(position = self.position(), danio = 1)
+    proyectilRival.spawnDisparo(self.position())
+    nivel1.proyectilesRivales().add(proyectilRival)  
+  }
+ }
 
 
