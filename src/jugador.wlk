@@ -105,12 +105,17 @@ class Proyectiles {
   }
 }
 
-//Cambiarle sprite al proyectil rival
+
 class ProyectilRival inherits Proyectiles {
   override method avanzar(){
     self.position(self.position().down(1))
   }
+	override method remover(){	
+		game.removeVisual(self)
+    self.position(game.at(-100, -100))
+    nivel1.proyectilesRivales().remove(self)
 
+  }
   override method spawnDisparo(posicion){
     //Se añade la visual:
     game.addVisual(self)
