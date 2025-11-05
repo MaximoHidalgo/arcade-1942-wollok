@@ -34,6 +34,7 @@ class Enemigo {
     if(!removido){
       removido = true
       game.removeVisual(self)
+      nivel1.enemigos().remove(self)
     }
   }
 
