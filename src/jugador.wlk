@@ -13,6 +13,7 @@ object jugador {
   var property vidas = 3
   var property puntos = 0
   var property disparos_activo = false
+  var property esJugador = true
   var img = "jugadorBase.png"
 
   method cambiarImagen(nuevaImagen) {
@@ -63,6 +64,7 @@ class Proyectiles {
   var property position
   var property danio
   var property image = "proyectiles.png"
+  var property esProyectil = true
 
   //Metodo para desplazar disparo:
   method spawnDisparo(posicion){
@@ -74,6 +76,9 @@ class Proyectiles {
    game.whenCollideDo(self, { otro =>
       if (otro.esEnemigo()) {
         otro.recibirDanio(self.danio())
+        self.remover()
+      }
+      if (otro.esProyectil()) {
         self.remover()
       }
     })
@@ -97,8 +102,33 @@ class Proyectiles {
     self.position(self.position().up(1))
     
   }	
+
+  
   
   method hacerDanio(enemigo){
     enemigo.recibirDanio(danio)
   }
+}
+
+//Cambiarle sprite al proyectil rival
+class ProyectilRival inherits Proyectiles {
+override method avanzar(){
+    self.position(self.position().down(1))
+  }
+
+  override method spawnDisparo(posicion){
+    //Se añade la visual:
+    game.addVisual(self)
+    //El proyectil empieza por la posición del jugador:
+    self.position(posicion)
+   game.whenCollideDo(self, { otro =>
+      if (otro.esJugador()) {
+        otro.recibirDanio(self.danio())
+        self.remover()
+      }
+      
+    })
+   
+  }
+  
 }
