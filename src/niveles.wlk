@@ -16,6 +16,7 @@ import menu.*
 object nivel1 {
     var property img = "videoMapa1.gif"
     var property enemigos = []
+    var property proyectilesRivales = []
 
     method iniciar(){
         mapa.visualizarCon(img)
@@ -50,6 +51,26 @@ object nivel1 {
         game.onTick(500, "moverEnemigoRapido", {
             (enemigos.filter({e => e.image() == "sprite.png"})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
         })
+
+        game.onTick(7000, "spawnEnemigoPesado", {
+            const enemigoPesado= new EnemigoPesado(position = game.at(0.randomUpTo(game.width()),7))
+            enemigoPesado.spawnEnemigo()
+            enemigos.add(enemigoPesado)
+        })
+
+        game.onTick(3000, "moverEnemigoPesado", {
+            (enemigos.filter({e => e.vidas() == 2})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
+        })
+        game.onTick(6000, "disparoEnemigoPesado",{
+            (enemigos.filter({e => e.vidas() == 2})).forEach({enemigo => enemigo.ataqueReg()})
+        })
+
+        game.onTick(400, "moverProyectilesRivales", {
+      proyectilesRivales.forEach({p =>
+        p.avanzar()
+        p.comprobarLimiteMapa()
+      })
+    })
 
         game.onCollideDo(jugador, {e =>if(e.esEnemigo()){
         e.hacerDanio(jugador)}})
