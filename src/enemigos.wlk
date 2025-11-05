@@ -63,8 +63,8 @@ class Enemigo {
   } 
 } 
 
-//Enemigo Pesado Cambiarle el Sprite
-class EnemigoPesado inherits Enemigo (vidas = 2, danio = 2, image = "jugadorBase.png") {
+
+class EnemigoPesado inherits Enemigo (vidas = 2, danio = 2, image = "enemigoPesaddo.png") {
   method ataqueReg() {
     const proyectilRival = new ProyectilRival(position = self.position(), danio = 1)
     proyectilRival.spawnDisparo(self.position())
