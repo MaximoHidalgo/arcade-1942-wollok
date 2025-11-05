@@ -10,11 +10,9 @@ import niveles.*
 
 program Juego1942PC {
 //Ejecución para que arranque:
-
 	juego.tablero()
 
 	juego.iniciar()
 	
 	game.start()
 }
-

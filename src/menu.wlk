@@ -17,7 +17,12 @@ object menuInicio {
     var property image = "menu.png"
     
     method fin() {
+        game.sound("sonidoVictoria.wav").play()
+        nivelManager.limpieza()
+        game.allVisuals().forEach({visual => game.removeVisual(visual)})
         image = "pantalla-victoria.png"
+        game.addVisual(self)
+        game.schedule(2000,{game.stop()})
     }
     
     method infoControles() {

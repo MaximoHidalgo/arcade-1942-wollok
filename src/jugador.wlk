@@ -58,7 +58,6 @@ object jugador {
 }
 
 //Disparos del avion:
-
 class Proyectiles {
   //Atributos:
   var property position
@@ -96,15 +95,11 @@ class Proyectiles {
     self.remover()}
   }
 
-
 	//Metodo de avance del disparo:
 	method avanzar(){
     self.position(self.position().up(1))
-    
   }	
 
-  
-  
   method hacerDanio(enemigo){
     enemigo.recibirDanio(danio)
   }
@@ -112,7 +107,7 @@ class Proyectiles {
 
 //Cambiarle sprite al proyectil rival
 class ProyectilRival inherits Proyectiles {
-override method avanzar(){
+  override method avanzar(){
     self.position(self.position().down(1))
   }
 
@@ -131,4 +126,23 @@ override method avanzar(){
    
   }
   
+}
+
+class ProyectilJefe inherits Proyectiles (image = "proyectilesJefe1.png") {
+
+  override method comprobarLimiteMapa(){
+    if(self.position().y() < 0){  //Limite abajo
+    self.remover()}
+  }
+
+  override method avanzar(){
+    self.position(self.position().down(1))
+  }
+
+  override method spawnDisparo(posicion){
+    game.addVisual(self)
+    game.sound("proyectil.mp3").play()
+    self.position(posicion)
+    game.whenCollideDo(self, { jugador =>if (jugador.esJugador()) {jugador.recibirDanio(self.danio()) self.remover() }})
+  }
 }
