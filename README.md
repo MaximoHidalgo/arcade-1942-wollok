@@ -35,6 +35,21 @@ Diagrama:
 
 <img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/6e424451-41d6-49a8-9a8c-770de1b80163" />
 
+# Entrega 3 
+
+# Explicaciones Teóricas
+
+Explicaciones Teóricas
+
+En jugador.wlk después de definir el objeto jugador creamos una class Proyectiles para definir los atributos y comportamientos que tienen los proyectiles que lanza el jugador. Usando herencia creamos la class ProyectilesRival que hereda de la class Proyectiles. De la misma manera que se hizo con ProyectilesRival se hizo ProyectilJefe. Luego la creación y movimientos de los proyectiles están definidos por un onTick en niveles.wlk.
+
+En enemigos.wlk utilizamos una class Enemigo para definir a los enemigos del juego con sus atributos base y sus comportamientos esto para luego poder crear múltiples enemigos. Luego gracias a la herencia podemos crear subclases de enemigos que compartan atributos y comportamiento como también que haya comportamientos que cambien utilizando override como ejemplo a la subclase EnemigoPesado que hace un override a method comprobarLimiteMapa(), method avanzar() y a method spawnDisparo(). También gracias a la herencia, pero no este caso no siendo una subclase utilizamos la herencia para crear al objeto jefe. Luego los enemigos son creados y se mueven mediante un onTick que está definido en niveles.wlk.
+
+En menu.wlk es donde especificamos como se va a crear el hud del juego y como este se va a ir actualizando en función de la vida del jugador y de la cantidad de puntos que este consiga eliminando enemigos. 
+
+En niveles.wlk se utiliza el onTick para poder definir cómo y cada cuanto va a ser el spawn de enemigos, cada cuanto se mueven ellos y en el caso de ciertos enemigos como se mueven sus proyectiles. También se genera el puntaje del jugador que se va actualizando a medida que este elimine enemigos y las vidas que tiene el jugador.
+
+
 
 
 # 🧠 Grupo El ultimo paradigma
