@@ -107,3 +107,72 @@ object cantPuntos {
         })
     }
 }
+
+
+
+
+
+/*
+
+object hud {
+
+    method dibujar() {
+        game.addVisual(barra)
+        game.addVisual(cantVida)
+        cantPuntos.actualizar(0) // inicializa y muestra 0
+    }
+}
+
+
+object cantPuntos {
+    var property digits = []
+    var property maxDigits = 9
+    var property baseX = 14   // ajustar para la posición derecha del contador
+    var property baseY = 0
+
+    method actualizar(puntos) {
+        const valor = null.maxDigits(0, puntos)
+        var texto = valor.toString()
+
+        if (texto.length() > maxDigits) {
+            texto = texto.substring(texto.length() - maxDigits, texto.length())
+        }
+        
+        
+        // crear/reusar dígitos 
+        texto.length().times({ i =>
+            const posIndex = i - 1
+            const charIndex = texto.length() - 1 - posIndex   // tomo desde el final para alinear a la derecha
+            const char = texto.charAt(charIndex)
+            const pos = game.at(baseX - posIndex, baseY)
+
+
+            if (posIndex >= digits.size()) {
+                const digito = object {
+                    var property image = char + ".png"
+                    var property position = pos
+                }
+                digits.add(digito)
+                game.addVisual(digito)
+            } else {
+                const digito = object {
+                var property image = char + ".png"
+                var property position = pos
+            }
+        }
+
+        // quitar dígitos sobrantes
+        if (digits.size() > texto.length()) {
+            const rem = digits.remove(digits.size() - 1)
+            game.removeVisual(rem)
+        }
+    }
+
+    method ocultar() {
+        digits.forEach({ d => game.removeVisual(d) })
+        digits.clear()
+    }
+}
+
+*/
+
