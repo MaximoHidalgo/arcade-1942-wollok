@@ -31,7 +31,7 @@ object nivel1 {
         keyboard.x().onPressDo{jugador.ataqueReg()}
         
         game.onTick(2000, "spawEnemigos", {
-            const enemigo = new Enemigo(vidas = 1, danio = 1, position = game.at(0.randomUpTo(game.width()),7), image = "enemigo.png")
+            const enemigo = new Enemigo(position = game.at(0.randomUpTo(game.width()),7))
             enemigo.spawnEnemigo()
             enemigos.add(enemigo)
         })
@@ -41,13 +41,13 @@ object nivel1 {
         })
 
         game.onTick(3000, "spawnEnemigosRapidos", {
-            const enemigoRapido = new Enemigo(vidas = 1, danio = 2, position = game.at(0.randomUpTo(game.width()),7), image = "sprite.png")
+            const enemigoRapido = new Enemigo(danio = 2, position = game.at(0.randomUpTo(game.width()),7), image = "enemigoRapido.png")
             enemigoRapido.spawnEnemigo()
             enemigos.add(enemigoRapido)
         })
 
         game.onTick(500, "moverEnemigoRapido", {
-            (enemigos.filter({e => e.image() == "sprite.png"})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
+            (enemigos.filter({e => e.image() == "enemigoRapido.png"})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
         })
 
         game.onTick(7000, "spawnEnemigoPesado", {
@@ -76,13 +76,14 @@ object nivel1 {
             game.removeTickEvent("spawnEnemigosRapidos")
             game.removeTickEvent("spawnEnemigoPesado")
             game.removeTickEvent("disparoEnemigoPesado")
-            game.removeTickEvent("moverProyectilesRivales")
-            game.schedule(8000, {game.removeTickEvent("moverEnemigo")})
-            game.schedule(8000, {game.removeTickEvent("moverEnemigoRapido")})
-            game.schedule(8000, {game.removeTickEvent("moverEnemigoPesado")})
+            game.schedule(10000, {game.removeTickEvent("moverProyectilesRivales")})
+            game.schedule(10000, {game.removeTickEvent("moverEnemigo")})
+            game.schedule(10000, {game.removeTickEvent("moverEnemigoRapido")})
+            game.schedule(10000, {game.removeTickEvent("moverEnemigoPesado")})
             game.onTick(500, "moverJefe", {jefe.movimiento()})
             game.onTick(1500, "disparoJefe", {jefe.ataqueReg()})
         })
+
 
         hud.dibujar()
     }

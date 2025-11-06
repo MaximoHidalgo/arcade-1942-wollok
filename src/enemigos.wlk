@@ -11,7 +11,7 @@ import niveles.*
 
 class Enemigo {
   //Atributos:
-  var property position = game.at(4,10)
+  var property position
   var property vidas = 1
   var property danio = 1
   var property image = "enemigo.png"
@@ -64,7 +64,19 @@ class Enemigo {
 } 
 
 
-class EnemigoPesado inherits Enemigo (vidas = 2, danio = 2, image = "enemigoPesaddo.png") {
+class EnemigoPesado inherits Enemigo (vidas = 2, danio = 2, image = "enemigoPesado.png") {
+
+  override method comprobarMorir() {
+    if (vidas <= 0) {
+      self.remover()
+      jugador.sumarPuntos(300)
+      cantPuntos.actualizar(jugador.puntos())
+      }
+    if (self.comprobarLimiteMapa()) {
+      self.remover()
+    }
+  }
+
   method ataqueReg() {
     const proyectilRival = new ProyectilRival(position = self.position(), danio = 1)
     proyectilRival.spawnDisparo(self.position())

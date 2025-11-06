@@ -50,11 +50,7 @@ object jugador {
 
   method sumarPuntos(cantidad){
     puntos = puntos + cantidad
-  } 
-
-
-  //Cambiar por un gif del avion moviendose,
-  //para poder dar la sensacion de que el avion se mueve
+  }
 }
 
 //Disparos del avion:
@@ -106,7 +102,7 @@ class Proyectiles {
 }
 
 
-class ProyectilRival inherits Proyectiles {
+class ProyectilRival inherits Proyectiles (image = "proyectilesJefe1.png") {
   override method avanzar(){
     self.position(self.position().down(1))
   }

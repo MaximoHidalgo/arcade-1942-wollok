@@ -9,14 +9,17 @@ Presentar diferentes ideas de juegos y un primer prototipo sencillo que implemen
 
 ## 🎮 Ideas de Juego Presentada
 
-1. **The Legend of Zelda 1986**  
-   El personaje se encuentra liberado en un mapa y tiene una mision, salvar el mundo. Hasta ahora puede moverse e interactuar con algunas cosas.  
-   - Al tocar objetos, los consume y los puede usar.  
-   - Al tocar un corazon gana una vida, si tiene el maximo, queda igual.  
-   - Al ser tocado por los enemigos, pierde vidas, si llega a 0 muere.
+1. Arcade 1942
+El objetivo del jugador es sobrevivir y completar la misión, demostrando habilidad, reflejos y estrategia en cada enfrentamiento.
+Durante la partida, el jugador debe:
+
+   - Moverse libremente por el mapa evitando los ataques enemigos.
+   - Derribar aviones enemigos mientras esquiva proyectiles.
+   - Hacer la mayor cantidad de puntos posibles.
+   - Superar oleadas de enemigos y enfrentarse a jefe final para sumar puntos.
 
 ## Metas del juego
-Este prototipo demuestra los primeros pasos del desarrollo y sirve como base para incorporar futuras ideas. Entre los objetivos se encuentra intentar incorporar otras mecanicas, jefes, mas armas o herramientas y mejorar las interfaces para el jugador.
+Este prototipo demuestra los primeros pasos del desarrollo y sirve como base para incorporar futuras ideas. Entre los objetivos se encuentra intentar incorporar otras mecanicas, jefes, mas armas y mejorar las interfaces para el jugador.
 
 
 # Entrega 2 - Lógica principal funcionando
