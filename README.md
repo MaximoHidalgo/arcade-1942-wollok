@@ -24,7 +24,7 @@ Este prototipo demuestra los primeros pasos del desarrollo y sirve como base par
 
 # Entrega 2 - Lógica principal funcionando
 
-Diagrama: 
+Diagrama Estático: 
 [≪object≫;jugador|position; vidas; puntos; img |cambiarImagen(nuevaImagen);image();ataqueReg();recibirDanio(danio); morir()]
 
 [Proyectiles|position; danioProyectil; image|cambiarImagen(nuevaImagen);danioProyectil();spawnDisparo(posicion);remover();comprobarLimiteMapa();avanzar();poderAtaque(enemigo)]
@@ -52,6 +52,9 @@ En menu.wlk es donde especificamos como se va a crear el hud del juego y como es
 
 En niveles.wlk se utiliza el onTick para poder definir cómo y cada cuanto va a ser el spawn de enemigos, cada cuanto se mueven ellos y en el caso de ciertos enemigos como se mueven sus proyectiles. También se genera el puntaje del jugador que se va actualizando a medida que este elimine enemigos y las vidas que tiene el jugador.
 
+*Diagrama Estático actualizado*:
+
+<img width="704" height="1468" alt="image" src="https://github.com/user-attachments/assets/281958b1-78cb-4947-ab83-ead1154613d1" />
 
 
 
