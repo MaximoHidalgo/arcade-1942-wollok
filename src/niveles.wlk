@@ -20,11 +20,11 @@ object nivel1 {
         game.sound("musicaNivel1.mp3").play()
         
         //Entradas Teclado
-        keyboard.left().onPressDo({jugador.cambiarImagen("jugadorIzqu.png")})
-        keyboard.right().onPressDo({jugador.cambiarImagen("jugadorDer.png")})
-        keyboard.up().onPressDo({jugador.cambiarImagen("jugadorBase.png")})
-        keyboard.down().onPressDo({jugador.cambiarImagen("jugadorBase.png")})
-        keyboard.x().onPressDo{jugador.ataqueReg()}
+        keyboard.left().onPressDo({jugador.image("jugadorIzqu.png")})
+        keyboard.right().onPressDo({jugador.image("jugadorDer.png")})
+        keyboard.up().onPressDo({jugador.image("jugadorBase.png")})
+        keyboard.down().onPressDo({jugador.image("jugadorBase.png")})
+        keyboard.x().onPressDo{jugador.ataque()}
         
         game.onTick(2000, "spawEnemigos", {
             const enemigo = new Enemigo(position = game.at(0.randomUpTo(game.width()),7))
@@ -57,7 +57,7 @@ object nivel1 {
         })
 
         game.onTick(6000, "disparoEnemigoPesado",{
-            (enemigos.filter({e => e.vidas() == 2})).forEach({enemigo => enemigo.ataqueReg()})
+            (enemigos.filter({e => e.vidas() == 2})).forEach({enemigo => enemigo.ataque()})
         })
 
         game.onTick(400, "moverProyectilesRivales", {
@@ -77,7 +77,7 @@ object nivel1 {
             game.schedule(10000, {game.removeTickEvent("moverEnemigoRapido")})
             game.schedule(10000, {game.removeTickEvent("moverEnemigoPesado")})
             game.onTick(500, "moverJefe", {jefe.movimiento()})
-            game.onTick(1500, "disparoJefe", {jefe.ataqueReg()})
+            game.onTick(1500, "disparoJefe", {jefe.ataque()})
         })
 
 

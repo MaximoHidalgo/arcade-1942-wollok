@@ -25,7 +25,7 @@ Este prototipo demuestra los primeros pasos del desarrollo y sirve como base par
 # Entrega 2 - Lógica principal funcionando
 
 Diagrama Estático: 
-[≪object≫;jugador|position; vidas; puntos; img |cambiarImagen(nuevaImagen);image();ataqueReg();recibirDanio(danio); morir()]
+[≪object≫;jugador|position; vidas; puntos; img |cambiarImagen(nuevaImagen);image();ataque();recibirDanio(danio); morir()]
 
 [Proyectiles|position; danioProyectil; image|cambiarImagen(nuevaImagen);danioProyectil();spawnDisparo(posicion);remover();comprobarLimiteMapa();avanzar();poderAtaque(enemigo)]
 

@@ -8,17 +8,11 @@ object jugador {
   var property position = game.at(5,1)
   var property vidas = 3
   var property puntos = 0
-  var property disparos_activo = false
+  //var property disparos_activo = false
   var property esJugador = true
-  var img = "jugadorBase.png"
-
-  method cambiarImagen(nuevaImagen) {
-        img = nuevaImagen
-    }
-    
-  method image() = img
-  
-  method ataqueReg(){
+  var property image = "jugadorBase.png"
+ 
+  method ataque(){
     const proyectil = new Proyectiles(position = self.position(), danio = 1)
     proyectil.spawnDisparo(self.position())
     game.onTick(400, "ataque", { proyectil.avanzar() ; proyectil.comprobarLimiteMapa()})
@@ -40,7 +34,7 @@ object jugador {
 
   method morir() {
       game.sound("sonidoMuerte.wav").play()
-      img = "jugadorPierde.png"
+      self.image("jugadorPierde.png")
       game.schedule(700,{pantallas.pantallaDerrota()})
   }
 

@@ -72,7 +72,7 @@ class EnemigoPesado inherits Enemigo (vidas = 2, danio = 2, image = "enemigoPesa
     }
   }
 
-  method ataqueReg() {
+  method ataque() {
     const proyectilRival = new ProyectilRival(position = self.position(), danio = 1)
     proyectilRival.spawnDisparo(self.position())
     nivel1.proyectilesRivales().add(proyectilRival)  
@@ -117,7 +117,7 @@ object jefe inherits Enemigo (vidas = 10, danio = 2, position = game.at(0,6), im
     }
   }
 
-  method ataqueReg(){
+  method ataque(){
     const proyectiljefe = new ProyectilJefe(position = self.position(), danio = 1)
     proyectiljefe.spawnDisparo(self.position())
     game.onTick(400, "ataqueJefe", { proyectiljefe.avanzar() ; proyectiljefe.comprobarLimiteMapa()})
