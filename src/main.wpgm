@@ -1,18 +1,9 @@
 import wollok.game.*
-import controladorDeNivel.*
-import enemigos.*
-import estadosJuego.*
 import juego.*
-import jugador.*
-import mapa.*
-import menu.*
-import niveles.*
 
 program Juego1942PC {
 //Ejecución para que arranque:
 	juego.tablero()
-
 	juego.iniciar()
-	
 	game.start()
 }

@@ -1,12 +1,8 @@
 import wollok.game.*
-import controladorDeNivel.*
 import enemigos.*
-import estadosJuego.*
-import juego.*
 import jugador.*
-import main.*
 import mapa.*
-import menu.*
+import hud.*
 
 //---------------------
 //-------Niveles-------

@@ -6,7 +6,7 @@ import src.juego.*
 import src.jugador.*
 import src.main.*
 import src.mapa.*
-import src.menu.*
+import src.controladorDePantallas.*
 import src.niveles.*
 
 describe "testeos del juego 1942" {

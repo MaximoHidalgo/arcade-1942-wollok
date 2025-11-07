@@ -1,23 +1,17 @@
 import wollok.game.*
-import controladorDeNivel.*
-import enemigos.*
 import estadosJuego.*
-import jugador.*
-import main.*
-import mapa.*
-import menu.*
-import niveles.*
+import controladorDePantallas.*
 
 //------------------------------
 //------gestor del juego--------
 //------------------------------
 
 object juego {
-	var property estado = estadoMenu
+	var property estado = estadoControladorDePantallas
 
 	method iniciar(){
-        estado = estadoMenu
-		game.addVisual(menuInicio)
+        estado = estadoControladorDePantallas
+		game.addVisual(pantallas)
         keyboard.enter().onPressDo({
             estado.continuar()
         })

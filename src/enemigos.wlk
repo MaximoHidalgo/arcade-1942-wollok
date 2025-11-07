@@ -1,13 +1,9 @@
-// src/enemigos.wlk
 import wollok.game.*
-import controladorDeNivel.*
-import estadosJuego.*
-import juego.*
 import jugador.*
-import main.*
-import mapa.*
-import menu.*
+import controladorDePantallas.*
 import niveles.*
+import hud.*
+import proyectiles.*
 
 class Enemigo {
   //Atributos:
@@ -63,7 +59,6 @@ class Enemigo {
   } 
 } 
 
-
 class EnemigoPesado inherits Enemigo (vidas = 2, danio = 2, image = "enemigoPesado.png") {
 
   override method comprobarMorir() {
@@ -115,7 +110,7 @@ object jefe inherits Enemigo (vidas = 10, danio = 2, position = game.at(0,6), im
       game.removeTickEvent("disparoJefe")
       jugador.sumarPuntos(3000)
       cantPuntos.actualizar(jugador.puntos())
-      game.schedule(2000,{menuInicio.fin()})
+      game.schedule(2000,{pantallas.pantallaVictoria()})
       }
     if (self.comprobarLimiteMapa()) {
       self.remover()

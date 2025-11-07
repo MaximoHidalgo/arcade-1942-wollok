@@ -1,16 +1,16 @@
 import wollok.game.*
-import enemigos.*
 import estadosJuego.*
 import juego.*
-import jugador.*
-import main.*
-import mapa.*
-import menu.*
+import controladorDePantallas.*
 import niveles.*
+
+//---------------------------------
+//------controlador de niveles-----
+//---------------------------------
 
 object nivelManager {
     const property niveles = [nivel1]
-    var property actual = menuInicio
+    var property actual = pantallas
 
     method iniciarSigNivel() {
         self.validarSigNivel()
@@ -21,18 +21,19 @@ object nivelManager {
 
     method validarSigNivel() {
         if (niveles.isEmpty()) {
-            menuInicio.fin()
             juego.estado(cargando)
             self.error("Ganaste?")
+            pantallas.pantallaVictoria()
         }
     }
 
-    method limpieza() {
+    method terminarNivel(){
+        self.limpieza()
+        pantallas.animacionCargando()
+    }
+
+    method limpieza(){
         game.clear()
     }
 
-    method terminarNivel() {
-        self.limpieza()
-        menuInicio.animacionCargando()
-    }
 }
