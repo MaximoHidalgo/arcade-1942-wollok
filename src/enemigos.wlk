@@ -12,14 +12,29 @@ class Enemigo {
   var property danio = 1
   var property image = "enemigo.png"
   var property removido = false
-  var property esEnemigo = true
+  
+
+  method interactuarCon(otro) {
+  otro.interactuarConEnemigo(self)
+}
+
+method interactuarConJugador(jugador) {
+  jugador.recibirDanio(self.danio())
+}
+
+method interactuarConProyectil(proyectil) {
+  self.recibirDanio(proyectil.danio())
+  proyectil.remover()
+}
+method interactuarConProyectilRival(proyectil) { } // no hace nada
+method interactuarConEnemigo(enemigo) { } // nada, por si se tocan
 
   method spawnEnemigo(){
     //Se añade la visual:
     game.addVisual(self)
     game.sound("vueloEnemigo.wav").play()
-    game.onCollideDo(self, {p => 
-    self.recibirDanio(p.danioProyectil())})
+    game.onCollideDo(self, { otro => self.interactuarCon(otro) })
+
   }
 
   method movimiento(){
@@ -75,7 +90,7 @@ class EnemigoPesado inherits Enemigo (vidas = 2, danio = 2, image = "enemigoPesa
   method ataque() {
     const proyectilEnemigo = new ProyectilEnemigo(position = self.position(), danio = 1)
     proyectilEnemigo.spawnDisparo(self.position())
-    nivel1.proyectilesEnemigos().add(proyectilEnemigo)  
+    nivel1.proyectiles().add(proyectilEnemigo)  
   }
 }
 
@@ -88,7 +103,7 @@ object jefe inherits Enemigo (vidas = 10, danio = 2, position = game.at(0,6), im
   override method spawnEnemigo() {
     game.addVisual(self)
     musicaJefe.play()
-    game.onCollideDo(self, { p => self.recibirDanio(p.danioProyectil()) })
+    game.onCollideDo(self, { otro => self.interactuarCon(otro) })
   }
 
   override method movimiento() {
@@ -122,6 +137,6 @@ object jefe inherits Enemigo (vidas = 10, danio = 2, position = game.at(0,6), im
   method ataque(){
     const proyectiljefe = new ProyectilEnemigo(position = self.position(), danio = 1)
     proyectiljefe.spawnDisparo(self.position())
-    game.onTick(400, "ataqueJefe", { proyectiljefe.avanzar() ; proyectiljefe.comprobarLimiteMapa()})
+    nivel1.proyectiles().add(proyectiljefe)
   }
 }
