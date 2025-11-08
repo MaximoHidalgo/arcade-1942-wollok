@@ -8,7 +8,6 @@ object jugador {
   var property position = game.at(5,1)
   var property vidas = 3
   var property puntos = 0
-  //var property disparos_activo = false
   var property esJugador = true
   var property image = "jugadorBase.png"
  
@@ -17,7 +16,6 @@ object jugador {
     proyectil.spawnDisparo(self.position())
     game.onTick(400, "ataque", { proyectil.avanzar() ; proyectil.comprobarLimiteMapa()})
   }
-  
   
   method recibirDanio(danio){
     vidas = vidas - danio
@@ -35,7 +33,7 @@ object jugador {
   method morir() {
       game.sound("sonidoMuerte.wav").play()
       self.image("jugadorPierde.png")
-      game.schedule(700,{pantallas.pantallaDerrota()})
+      game.schedule(700,{pantallas.pantallaFinalizacion("pantalla-derrota.png","sonidoDerrota.wav")})
   }
 
   method sumarPuntos(cantidad){

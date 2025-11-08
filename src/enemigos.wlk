@@ -73,9 +73,9 @@ class EnemigoPesado inherits Enemigo (vidas = 2, danio = 2, image = "enemigoPesa
   }
 
   method ataque() {
-    const proyectilRival = new ProyectilRival(position = self.position(), danio = 1)
-    proyectilRival.spawnDisparo(self.position())
-    nivel1.proyectilesRivales().add(proyectilRival)  
+    const proyectilEnemigo = new ProyectilEnemigo(position = self.position(), danio = 1)
+    proyectilEnemigo.spawnDisparo(self.position())
+    nivel1.proyectilesEnemigos().add(proyectilEnemigo)  
   }
 }
 
@@ -83,10 +83,11 @@ object jefe inherits Enemigo (vidas = 10, danio = 2, position = game.at(0,6), im
   var property movimientos = ["derecha","derecha", "derecha", "derecha", "derecha","derecha","derecha","derecha",
   "izquierda", "izquierda","izquierda","izquierda","izquierda","izquierda","izquierda","izquierda"]
   var property indice = 0
+  const musicaJefe = game.sound("cancionjefe.wav")
 
   override method spawnEnemigo() {
     game.addVisual(self)
-    game.sound("cancionjefe.wav").play()
+    musicaJefe.play()
     game.onCollideDo(self, { p => self.recibirDanio(p.danioProyectil()) })
   }
 
@@ -108,9 +109,10 @@ object jefe inherits Enemigo (vidas = 10, danio = 2, position = game.at(0,6), im
       self.remover()
       game.removeTickEvent("moverJefe")
       game.removeTickEvent("disparoJefe")
+      musicaJefe.stop()
       jugador.sumarPuntos(3000)
       cantPuntos.actualizar(jugador.puntos())
-      game.schedule(2000,{pantallas.pantallaVictoria()})
+      game.schedule(2000,{pantallas.pantallaFinalizacion("pantalla-victoria.png","sonidoVictoria.wav")})
       }
     if (self.comprobarLimiteMapa()) {
       self.remover()
@@ -118,7 +120,7 @@ object jefe inherits Enemigo (vidas = 10, danio = 2, position = game.at(0,6), im
   }
 
   method ataque(){
-    const proyectiljefe = new ProyectilJefe(position = self.position(), danio = 1)
+    const proyectiljefe = new ProyectilEnemigo(position = self.position(), danio = 1)
     proyectiljefe.spawnDisparo(self.position())
     game.onTick(400, "ataqueJefe", { proyectiljefe.avanzar() ; proyectiljefe.comprobarLimiteMapa()})
   }

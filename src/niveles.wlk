@@ -12,12 +12,13 @@ import hud.*
 object nivel1 {
     var property img = "videoMapa1.gif"
     var property enemigos = []
-    var property proyectilesRivales = []
+    var property proyectilesEnemigos = []
+    var property musicaNivel1 = game.sound("musicaNivel1.mp3")
 
     method iniciar(){
         mapa.visualizarCon(img)
         game.addVisualCharacter(jugador)
-        game.sound("musicaNivel1.mp3").play()
+        musicaNivel1.play()
         
         //Entradas Teclado
         keyboard.left().onPressDo({jugador.image("jugadorIzqu.png")})
@@ -60,8 +61,8 @@ object nivel1 {
             (enemigos.filter({e => e.vidas() == 2})).forEach({enemigo => enemigo.ataque()})
         })
 
-        game.onTick(400, "moverProyectilesRivales", {
-            proyectilesRivales.forEach({p =>p.avanzar()p.comprobarLimiteMapa()})
+        game.onTick(400, "moverProyectilesEnemigos", {
+            proyectilesEnemigos.forEach({p =>p.avanzar()p.comprobarLimiteMapa()})
         })
 
         game.onCollideDo(jugador, {e =>if(e.esEnemigo()){e.hacerDanio(jugador)}})
@@ -72,14 +73,13 @@ object nivel1 {
             game.removeTickEvent("spawnEnemigosRapidos")
             game.removeTickEvent("spawnEnemigoPesado")
             game.removeTickEvent("disparoEnemigoPesado")
-            game.schedule(10000, {game.removeTickEvent("moverProyectilesRivales")})
+            game.schedule(10000, {game.removeTickEvent("moverProyectilesEnemigos")})
             game.schedule(10000, {game.removeTickEvent("moverEnemigo")})
             game.schedule(10000, {game.removeTickEvent("moverEnemigoRapido")})
             game.schedule(10000, {game.removeTickEvent("moverEnemigoPesado")})
             game.onTick(500, "moverJefe", {jefe.movimiento()})
             game.onTick(1500, "disparoJefe", {jefe.ataque()})
         })
-
 
         hud.dibujar()
     }

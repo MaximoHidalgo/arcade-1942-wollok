@@ -41,20 +41,11 @@ object pantallas {
         self.abandonarCargando()
     }
 
-    method pantallaDerrota() {
-        game.sound("sonidopantallaVictoriaalPartida.wav").play()
+    method pantallaFinalizacion(imagen, musica) {
         nivelManager.limpieza()
+        game.sound(musica).play()
         game.allVisuals().forEach({visual => game.removeVisual(visual)})
-        image = "pantalla-derrota.png"
-        game.addVisual(self)
-        game.schedule(2000,{game.stop()})
-    }
-
-    method pantallaVictoria() {
-        game.sound("sonidoVictoria.wav").play()
-        nivelManager.limpieza()
-        game.allVisuals().forEach({visual => game.removeVisual(visual)})
-        image = "pantalla-victoria.png"
+        image = imagen
         game.addVisual(self)
         game.schedule(2000,{game.stop()})
     }

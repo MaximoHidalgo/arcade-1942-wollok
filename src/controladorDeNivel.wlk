@@ -13,18 +13,13 @@ object nivelManager {
     var property actual = pantallas
 
     method iniciarSigNivel() {
-        self.validarSigNivel()
+        if (niveles.isEmpty()) {
+            juego.estado(cargando)
+            pantallas.pantallaFinalizacion("pantalla-victoria.png","sonidoVictoria.wav")
+        }
         actual = niveles.first()
         actual.iniciar()
         niveles.remove(actual)
-    }
-
-    method validarSigNivel() {
-        if (niveles.isEmpty()) {
-            juego.estado(cargando)
-            self.error("Ganaste?")
-            pantallas.pantallaVictoria()
-        }
     }
 
     method terminarNivel(){
@@ -34,6 +29,7 @@ object nivelManager {
 
     method limpieza(){
         game.clear()
+        actual.musicaNivel1().stop()
     }
 
 }
