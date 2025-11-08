@@ -56,10 +56,6 @@ class Enemigo {
   
   method comprobarLimiteMapa() = self.position().y() > game.height() - 1 || self.position().y() < 0
 
-  method hacerDanio(jugador){
-    jugador.recibirDanio(danio)
-  }
-
   method recibirDanio(danioProyectil){
     vidas = vidas - danioProyectil
     game.sound("impactoAEnemigo.wav").play()

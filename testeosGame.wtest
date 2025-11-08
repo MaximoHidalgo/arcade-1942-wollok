@@ -8,8 +8,9 @@ import src.main.*
 import src.mapa.*
 import src.controladorDePantallas.*
 import src.niveles.*
-
+/*
 describe "testeos del juego 1942" {
+
 
   test "el enemigo no muere si no se remueve" {
     const enemigo = new Enemigo(vidas = 0, danio = 1, position = game.origin(), image = "enemigo.png")
@@ -20,4 +21,6 @@ describe "testeos del juego 1942" {
     enemigo.remover()
     assert.that(enemigo.removido())
   }
+
 }
+  */

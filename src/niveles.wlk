@@ -38,7 +38,7 @@ object nivel1 {
         })
 
         game.onTick(4000, "spawnEnemigosRapidos", {
-            const enemigoRapido = new Enemigo(danio = 2, position = game.at(0.randomUpTo(game.width()),7), image = "enemigoRapido.png")
+            const enemigoRapido = new Enemigo(position = game.at(0.randomUpTo(game.width()),7), image = "enemigoRapido.png")
             enemigoRapido.spawnEnemigo()
             enemigos.add(enemigoRapido)
             (enemigos.filter({e => e.vidas() == 2})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})

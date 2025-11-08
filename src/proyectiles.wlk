@@ -30,7 +30,7 @@ class Proyectiles {
     game.addVisual(self)
     game.sound("proyectil.mp3").play()
     self.position(posicion)
-   game.whenCollideDo(self, {otro => self.interactuarCon(otro)}) 
+   game.onCollideDo(self, {otro => self.interactuarCon(otro)}) 
   }
   
   //Metodo que remueve los disparos:
@@ -65,7 +65,7 @@ class ProyectilEnemigo inherits Proyectiles (image = "proyectilesJefe1.png") {
     game.addVisual(self)
     game.sound("proyectil.mp3").play()
     self.position(posicion)
-    game.whenCollideDo(self, { otro => self.interactuarCon(otro)})
+    game.onCollideDo(self, { otro => self.interactuarCon(otro)})
   }
   override method interactuarCon(otro) {
     otro.interactuarConProyectilRival(self)

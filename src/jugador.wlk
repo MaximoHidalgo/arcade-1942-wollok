@@ -6,7 +6,7 @@ import proyectiles.*
 
 object jugador {
   var property position = game.at(5, 1)
-  var property vidas = 3
+  var property vidas = 4
   var property puntos = 0
   var property image = "jugadorBase.png"
   
@@ -32,7 +32,7 @@ object jugador {
   }
   
   method recibirDanio(danio) {
-    vidas -= danio
+    vidas = vidas - danio
     if (vidas == 2) {
       cantVida.image("corazones2.png")
     } 
@@ -45,7 +45,7 @@ object jugador {
     }
     return vidas
   }
-  
+
   method morir() {
     game.sound("sonidoMuerte.wav").play()
     self.image("jugadorPierde.png")
