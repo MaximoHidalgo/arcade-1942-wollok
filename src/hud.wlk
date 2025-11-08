@@ -1,6 +1,14 @@
 import wollok.game.*
 
-object hud {
+
+class ObjetoPasivo{
+    method interactuarCon(otro) { } // no hace nada
+    method interactuarConJugador(jugador) { }
+    method interactuarConEnemigo(enemigo) { }
+    method interactuarConProyectil(proy) { }
+    method interactuarConProyectilRival(proy) { }
+}
+object hud inherits ObjetoPasivo {
     method dibujar() {
         game.addVisual(barra)
         game.addVisual(cantVida)
@@ -9,22 +17,22 @@ object hud {
     }
 }
 
-object barra {
+object barra inherits ObjetoPasivo {
     var property image = "barra.png"
     var property position = game.at(0,7)
 }
 
-object cantVida {
+object cantVida inherits ObjetoPasivo {
     var property image = "corazones3.png"
     var property position = game.at(0,7)
 }
 
-object textoPuntos {
+object textoPuntos inherits ObjetoPasivo {
     var property image = "textoPuntos.png"
     var property position = game.at(4,7)
 }
 
-object cantPuntos {
+object cantPuntos inherits ObjetoPasivo {
     var property digits = []
     var property position = game.at(6,7)
     var property image = "puntajeBase.png"
