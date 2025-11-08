@@ -12,7 +12,7 @@ import hud.*
 object nivel1 {
     var property img = "videoMapa1.gif"
     var property enemigos = []
-    var property proyectilesEnemigos = []
+    var property proyectiles = []
     var property musicaNivel1 = game.sound("musicaNivel1.mp3")
 
     method iniciar(){
@@ -41,6 +41,7 @@ object nivel1 {
             const enemigoRapido = new Enemigo(danio = 2, position = game.at(0.randomUpTo(game.width()),7), image = "enemigoRapido.png")
             enemigoRapido.spawnEnemigo()
             enemigos.add(enemigoRapido)
+            (enemigos.filter({e => e.vidas() == 2})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
         })
 
         game.onTick(500, "moverEnemigoRapido", {
@@ -48,24 +49,26 @@ object nivel1 {
         })
 
         game.onTick(7000, "spawnEnemigoPesado", {
-            const enemigoPesado= new EnemigoPesado(position = game.at(0.randomUpTo(game.width()),7))
+            const enemigoPesado= new EnemigoPesado(position = game.at(0.randomUpTo(game.width()),6))
             enemigoPesado.spawnEnemigo()
             enemigos.add(enemigoPesado)
         })
 
-        game.onTick(3000, "moverEnemigoPesado", {
+        /*game.onTick(3000, "moverEnemigoPesado", {
             (enemigos.filter({e => e.vidas() == 2})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
-        })
+        }) */
 
         game.onTick(6000, "disparoEnemigoPesado",{
             (enemigos.filter({e => e.vidas() == 2})).forEach({enemigo => enemigo.ataque()})
         })
 
-        game.onTick(400, "moverProyectilesEnemigos", {
-            proyectilesEnemigos.forEach({p =>p.avanzar()p.comprobarLimiteMapa()})
+        game.onTick(400, "moverProyectiles", {
+            proyectiles.forEach({p =>p.avanzar()p.comprobarLimiteMapa()})
         })
 
-        game.onCollideDo(jugador, {e =>if(e.esEnemigo()){e.hacerDanio(jugador)}})
+        game.onCollideDo(jugador, {otro => jugador.interactuarCon(otro)})
+        
+
 
         game.schedule(61000, {
             jefe.spawnEnemigo()
