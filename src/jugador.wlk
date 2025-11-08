@@ -8,13 +8,29 @@ object jugador {
   var property position = game.at(5,1)
   var property vidas = 3
   var property puntos = 0
-  var property esJugador = true
+  
   var property image = "jugadorBase.png"
  
+  method interactuarCon(otro) {
+  otro.interactuarConJugador(self)
+}
+
+method interactuarConEnemigo(enemigo) {
+  self.recibirDanio(enemigo.danio())
+}
+
+method interactuarConProyectilRival(proyectil) {
+  self.recibirDanio(proyectil.danio())
+  proyectil.remover()
+}
+
+
+method interactuarConProyectil(proyectil) { } // no hace nada
+
   method ataque(){
     const proyectil = new Proyectiles(position = self.position(), danio = 1)
     proyectil.spawnDisparo(self.position())
-    game.onTick(400, "ataque", { proyectil.avanzar() ; proyectil.comprobarLimiteMapa()})
+    nivel1.proyectiles().add(proyectil)
   }
   
   method recibirDanio(danio){
