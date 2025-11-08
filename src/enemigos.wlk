@@ -11,30 +11,26 @@ class Enemigo {
   var property vidas = 1
   var property danio = 1
   var property image = "enemigo.png"
-  var property removido = false
   
 
   method interactuarCon(otro) {
-  otro.interactuarConEnemigo(self)
-}
-
-method interactuarConJugador(jugador) {
-  jugador.recibirDanio(self.danio())
-}
-
-method interactuarConProyectil(proyectil) {
-  self.recibirDanio(proyectil.danio())
-  proyectil.remover()
-}
-method interactuarConProyectilRival(proyectil) { } // no hace nada
-method interactuarConEnemigo(enemigo) { } // nada, por si se tocan
+    otro.interactuarConEnemigo(self)
+  }
+  method interactuarConJugador(jugador) {
+    jugador.recibirDanio(self.danio())
+  }
+  method interactuarConProyectil(proyectil) {
+    self.recibirDanio(proyectil.danio())
+    proyectil.remover()
+  }
+  
+  method interactuarConProyectilRival(proyectil) { } // no hace nada
+  method interactuarConEnemigo(enemigo) { } // nada, por si se tocan
 
   method spawnEnemigo(){
-    //Se añade la visual:
     game.addVisual(self)
     game.sound("vueloEnemigo.wav").play()
     game.onCollideDo(self, { otro => self.interactuarCon(otro) })
-
   }
 
   method movimiento(){
@@ -42,11 +38,8 @@ method interactuarConEnemigo(enemigo) { } // nada, por si se tocan
   }
   
   method remover(){
-    if(!removido){
-      removido = true
       game.removeVisual(self)
       nivel1.enemigos().remove(self)
-    }
   }
 
   //Metodo morir:
@@ -95,6 +88,7 @@ class EnemigoPesado inherits Enemigo (vidas = 2, danio = 2, image = "enemigoPesa
 }
 
 object jefe inherits Enemigo (vidas = 10, danio = 2, position = game.at(0,6), image = "jefeImagen1.png") {
+  
   var property movimientos = ["derecha","derecha", "derecha", "derecha", "derecha","derecha","derecha","derecha",
   "izquierda", "izquierda","izquierda","izquierda","izquierda","izquierda","izquierda","izquierda"]
   var property indice = 0
@@ -109,11 +103,8 @@ object jefe inherits Enemigo (vidas = 10, danio = 2, position = game.at(0,6), im
   override method movimiento() {
     const dir = movimientos.get(indice)
 
-    if (dir == "derecha") {
-      position = position.right(1)
-    } else if (dir == "izquierda") {
-      position = position.left(1)
-    }
+    if (dir == "derecha") {position = position.right(1)} 
+    else if (dir == "izquierda") {position = position.left(1)}
 
     indice += 1
     if (indice >= movimientos.size()) indice = 0

@@ -2,12 +2,13 @@ import wollok.game.*
 import controladorDeNivel.*
 import estadosJuego.*
 import juego.*
+import hud.*
 
 //-----------------------------------
 //------controlador de pantallas-----
 //-----------------------------------
 
-object pantallas {
+object pantallas inherits ObjetoPasivo {
     var property position = game.origin()
     var property image = "inicio.png"
      

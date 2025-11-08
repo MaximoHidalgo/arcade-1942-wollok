@@ -12,17 +12,18 @@ class Proyectiles {
   var property image = "proyectiles.png"
   
 
-  method interactuarCon(otro) {
+  method interactuarCon(otro){
   otro.interactuarConProyectil(self)
-}
-method interactuarConProyectilRival(proyectil) { } // no hace nada
-method interactuarConProyectil(proyectil) { } // no hace nada
-method interactuarConEnemigo(enemigo) {
+  }
+
+  method interactuarConEnemigo(enemigo){
   enemigo.recibirDanio(self.danio())
   self.remover()
-}
+  }
 
-method interactuarConJugador(jugador) { } // no daña al jugador
+  method interactuarConProyectilRival(proyectil) {} // no hace nada
+  method interactuarConProyectil(proyectil) {} // no hace nada
+  method interactuarConJugador(jugador) { } // no daña al jugador
 
   //Metodo para desplazar disparo:
   method spawnDisparo(posicion){
@@ -46,16 +47,10 @@ method interactuarConJugador(jugador) { } // no daña al jugador
 	//Metodo de avance del disparo:
 	method avanzar(){
     self.position(self.position().up(1))
-  }	
-
-  method hacerDanio(enemigo){
-    enemigo.recibirDanio(danio)
   }
 }
 
 class ProyectilEnemigo inherits Proyectiles (image = "proyectilesJefe1.png") {
-
-  
 
   override method avanzar(){
     self.position(self.position().down(1))
@@ -65,28 +60,20 @@ class ProyectilEnemigo inherits Proyectiles (image = "proyectilesJefe1.png") {
     if(self.position().y() < 0){ self.remover()}
   }
 
-	/*override method remover(){	
-		game.removeVisual(self)
-    self.position(game.at(-100, -100))
-    nivel1.proyectiles().remove(self)
-  } */
-
+  //revisar
   override method spawnDisparo(posicion){
     game.addVisual(self)
     game.sound("proyectil.mp3").play()
     self.position(posicion)
     game.whenCollideDo(self, { otro => self.interactuarCon(otro)})
   }
-
-override method interactuarCon(otro) {
-  otro.interactuarConProyectilRival(self)
-}
-
-override method interactuarConJugador(jugador) {
-  jugador.recibirDanio(self.danio())
-  self.remover()
-}
-
-override method interactuarConEnemigo(enemigo) { } // no daña a otros enemigos
-
+  override method interactuarCon(otro) {
+    otro.interactuarConProyectilRival(self)
+    }
+  
+  override method interactuarConJugador(jugador) {
+    jugador.recibirDanio(self.danio())
+    self.remover()
+  }
+  override method interactuarConEnemigo(enemigo) {} // no daña a otros enemigos
 }

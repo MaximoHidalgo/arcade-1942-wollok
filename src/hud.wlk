@@ -1,13 +1,13 @@
 import wollok.game.*
 
-
 class ObjetoPasivo{
-    method interactuarCon(otro) { } // no hace nada
-    method interactuarConJugador(jugador) { }
-    method interactuarConEnemigo(enemigo) { }
-    method interactuarConProyectil(proy) { }
-    method interactuarConProyectilRival(proy) { }
+    method interactuarCon(otro) {} // no hace nada
+    method interactuarConJugador(jugador) {}
+    method interactuarConEnemigo(enemigo) {}
+    method interactuarConProyectil(proy) {}
+    method interactuarConProyectilRival(proy) {}
 }
+
 object hud inherits ObjetoPasivo {
     method dibujar() {
         game.addVisual(barra)
