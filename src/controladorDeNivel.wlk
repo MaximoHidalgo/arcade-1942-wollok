@@ -3,6 +3,7 @@ import estadosJuego.*
 import juego.*
 import controladorDePantallas.*
 import niveles.*
+import musica.*
 
 //---------------------------------
 //------controlador de niveles-----
@@ -29,7 +30,7 @@ object nivelManager {
 
     method limpieza(){
         game.clear()
-        actual.musicaNivel1().stop()
+        musicaDeFondo.stop()
     }
 
 }

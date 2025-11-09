@@ -4,6 +4,7 @@ import controladorDePantallas.*
 import niveles.*
 import hud.*
 import proyectiles.*
+import musica.*
 
 class Enemigo {
   //Atributos:
@@ -88,11 +89,10 @@ object jefe inherits Enemigo (vidas = 10, danio = 2, position = game.at(0,6), im
   var property movimientos = ["derecha","derecha", "derecha", "derecha", "derecha","derecha","derecha","derecha",
   "izquierda", "izquierda","izquierda","izquierda","izquierda","izquierda","izquierda","izquierda"]
   var property indice = 0
-  const musicaJefe = game.sound("cancionjefe.wav")
 
   override method spawnEnemigo() {
+    musicaDeFondo.play("cancionjefe.wav")
     game.addVisual(self)
-    musicaJefe.play()
     game.onCollideDo(self, { otro => self.interactuarCon(otro) })
   }
 
@@ -111,7 +111,6 @@ object jefe inherits Enemigo (vidas = 10, danio = 2, position = game.at(0,6), im
       self.remover()
       game.removeTickEvent("moverJefe")
       game.removeTickEvent("disparoJefe")
-      musicaJefe.stop()
       jugador.sumarPuntos(3000)
       cantPuntos.actualizar(jugador.puntos())
       game.schedule(2000,{pantallas.pantallaFinalizacion("pantalla-victoria.png","sonidoVictoria.wav")})

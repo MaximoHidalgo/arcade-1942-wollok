@@ -3,6 +3,7 @@ import enemigos.*
 import jugador.*
 import mapa.*
 import hud.*
+import musica.*
 
 //---------------------
 //-------Niveles-------
@@ -13,12 +14,11 @@ object nivel1 {
     var property img = "videoMapa1.gif"
     var property enemigos = []
     var property proyectiles = []
-    var property musicaNivel1 = game.sound("musicaNivel1.mp3")
 
     method iniciar(){
         mapa.visualizarCon(img)
         game.addVisualCharacter(jugador)
-        musicaNivel1.play() 
+        musicaDeFondo.play("musicaNivel1.mp3")
         
         //Entradas Teclado
         keyboard.left().onPressDo({jugador.image("jugadorIzqu.png")})
