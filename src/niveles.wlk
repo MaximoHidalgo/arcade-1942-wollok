@@ -58,11 +58,11 @@ object nivel1 {
             (enemigos.filter({e => e.image() == "enemigoPesado.png"})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
         }) 
 
-        game.onTick(6000, "disparoEnemigoPesado",{
+        game.onTick(4000, "disparoEnemigoPesado",{
             (enemigos.filter({e => e.vidas() == 2})).forEach({enemigo => enemigo.ataque()})
         })
 
-        game.onTick(400, "moverProyectiles", {
+        game.onTick(100, "moverProyectiles", {
             proyectiles.forEach({p =>p.avanzar()p.comprobarLimiteMapa()})
         })
 

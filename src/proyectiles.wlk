@@ -21,7 +21,12 @@ class Proyectiles {
   self.remover()
   }
 
-  method interactuarConProyectilRival(proyectil) {} // no hace nada
+  method interactuarConProyectilRival(proyectil) {
+    game.sound("impactoProyectiles.wav").play()
+    self.remover()
+    proyectil.remover()
+  }
+
   method interactuarConProyectil(proyectil) {} // no hace nada
   method interactuarConJugador(jugador) { } // no daña al jugador
 
@@ -46,14 +51,14 @@ class Proyectiles {
 
 	//Metodo de avance del disparo:
 	method avanzar(){
-    self.position(self.position().up(1))
+    self.position(self.position().up(0.5))
   }
 }
 
 class ProyectilEnemigo inherits Proyectiles (image = "proyectilesJefe1.png") {
 
   override method avanzar(){
-    self.position(self.position().down(1))
+    self.position(self.position().down(0.5))
   }
 
   override method comprobarLimiteMapa(){
@@ -75,5 +80,12 @@ class ProyectilEnemigo inherits Proyectiles (image = "proyectilesJefe1.png") {
     jugador.recibirDanio(self.danio())
     self.remover()
   }
+  override method interactuarConProyectil(proyectil) {
+    game.sound("impactoProyectiles.wav").play()
+    self.remover()
+    proyectil.remover()
+  }
+
   override method interactuarConEnemigo(enemigo) {} // no daña a otros enemigos
+  override method interactuarConProyectilRival(proyectil){}  // no daña a otros proyectiles enemigos
 }
