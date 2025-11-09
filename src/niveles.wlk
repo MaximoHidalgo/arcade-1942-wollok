@@ -9,24 +9,40 @@ import musica.*
 //-------Niveles-------
 //---------------------
 
-
-object nivel1 {
-    var property img = "videoMapa1.gif"
+class Nivel{
     var property enemigos = []
     var property proyectiles = []
+    var property imagenFondo
+    var property musicaFondo
 
-    method iniciar(){
-        mapa.visualizarCon(img)
+    method iniciar() {
+        mapa.visualizarCon(imagenFondo)
+        musicaDeFondo.play(musicaFondo)
         game.addVisualCharacter(jugador)
-        musicaDeFondo.play("musicaNivel1.mp3")
-        
-        //Entradas Teclado
-        keyboard.left().onPressDo({jugador.image("jugadorIzqu.png")})
-        keyboard.right().onPressDo({jugador.image("jugadorDer.png")})
-        keyboard.up().onPressDo({jugador.image("jugadorBase.png")})
-        keyboard.down().onPressDo({jugador.image("jugadorBase.png")})
-        keyboard.x().onPressDo{jugador.ataque()}
-        
+        self.configurarControles()
+        hud.dibujar()
+        self.iniciarSpawners()
+        self.configurarColisiones()
+    }
+
+    method configurarControles() {
+        keyboard.left().onPressDo({ jugador.image("jugadorIzqu.png") })
+        keyboard.right().onPressDo({ jugador.image("jugadorDer.png") })
+        keyboard.up().onPressDo({ jugador.image("jugadorBase.png") })
+        keyboard.down().onPressDo({ jugador.image("jugadorBase.png") })
+        keyboard.x().onPressDo({ jugador.ataque() })
+    }
+
+    method configurarColisiones() {
+        game.onCollideDo(jugador, { otro => jugador.interactuarCon(otro) })
+    }
+
+    method iniciarSpawners() {}
+}
+
+object nivel1 inherits Nivel(imagenFondo = "videoMapa1.gif", musicaFondo = "musicaNivel1.mp3") {
+
+    override method iniciarSpawners() {
         game.onTick(2000, "spawEnemigos", {
             const enemigo = new Enemigo(position = game.at(0.randomUpTo(game.width()),7))
             enemigo.spawnEnemigo()
@@ -66,11 +82,8 @@ object nivel1 {
             proyectiles.forEach({p =>p.avanzar()p.comprobarLimiteMapa()})
         })
 
-        game.onCollideDo(jugador, {otro => jugador.interactuarCon(otro)})
-        
-
-
-        game.schedule(61000, {
+        // Programar aparición del jefe
+        game.schedule(40000, {
             jefe.spawnEnemigo()
             game.removeTickEvent("spawEnemigos")
             game.removeTickEvent("spawnEnemigosRapidos")
@@ -83,7 +96,9 @@ object nivel1 {
             game.onTick(500, "moverJefe", {jefe.movimiento()})
             game.onTick(1500, "disparoJefe", {jefe.ataque()})
         })
-
-        hud.dibujar()
     }
 }
+
+object nivel2 inherits Nivel(imagenFondo = "videoMapa2.gif", musicaFondo = "musicaNivel2.mp3") {}
+
+object nivel3 inherits Nivel(imagenFondo = "videoMapa3.gif", musicaFondo = "musicaNivel3.mp3") {}

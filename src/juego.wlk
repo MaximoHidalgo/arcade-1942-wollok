@@ -1,6 +1,7 @@
 import wollok.game.*
 import estadosJuego.*
 import controladorDePantallas.*
+import musica.*
 
 //------------------------------
 //------gestor del juego--------
@@ -12,6 +13,7 @@ object juego {
 	method iniciar(){
         estado = estadoControladorDePantallas
 		game.addVisual(pantallas)
+        musicaDeFondo.play("musicaIntro.wav")
         keyboard.enter().onPressDo({
             estado.continuar()
         })

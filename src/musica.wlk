@@ -7,7 +7,6 @@ object musicaDeFondo{
         if (temaActual != null) {
             temaActual.stop()
         }
-
         temaActual = game.sound(nombreArchivo)
         temaActual.play()
         temaActual.volume(volumen)
