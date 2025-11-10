@@ -8,7 +8,7 @@ import musica.*
 //------------------------------
 
 object juego {
-	var property estado = estadoControladorDePantallas
+    var property estado = estadoControladorDePantallas
 
 	method iniciar(){
         estado = estadoControladorDePantallas

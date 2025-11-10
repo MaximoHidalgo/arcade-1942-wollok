@@ -3,6 +3,7 @@ import controladorDeNivel.*
 import estadosJuego.*
 import juego.*
 import hud.*
+import musica.*
 
 //-----------------------------------
 //------controlador de pantallas-----
@@ -16,30 +17,27 @@ object pantallas inherits ObjetoPasivo {
         image = "Controles.png"
     }
 
-    method pantallaDeCarga() {
-        image = "carga3.png"
+    method pantallaDeInicio() {
+        image = "Inicio2.png"
         game.sound("sonidoStart.wav").play()
-        game.schedule(700,{self.abandonarCargando()})
+        game.schedule(700,{self.animacionCargando()})
+    }
+
+    method animacionCargando() {
+        juego.estado(cargando)
+        self.image("cargando.gif")
+        musicaDeFondo.play("audioCargando.wav")
+        game.schedule(6800, {self.limpiar()})
+    }
+
+    method limpiar() {
+        game.allVisuals().forEach({visual => game.removeVisual(visual)})
+        self.abandonarCargando()
     }
 
     method abandonarCargando() {
         nivelManager.iniciarSigNivel()
         game.removeVisual(self)
-    }
-
-    method animacionCargando() {
-        juego.estado(cargando)
-        game.addVisual(self)
-        image = "carga1.png"
-        game.schedule(400, {image="carga2.png"})
-        game.schedule(800, {self.limpiar()})
-    }
-
-    method limpiar() {
-        image = "carga3.png"
-        game.allVisuals().forEach({visual => game.removeVisual(visual)})
-        game.addVisual(self)
-        self.abandonarCargando()
     }
 
     method pantallaFinalizacion(imagen, musica) {

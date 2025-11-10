@@ -10,7 +10,7 @@ import musica.*
 //---------------------------------
 
 object nivelManager {
-    const property niveles = [nivel1, nivel2, nivel3]
+    const property niveles = [nivel1]
     var property actual = pantallas
 
     method iniciarSigNivel() {
