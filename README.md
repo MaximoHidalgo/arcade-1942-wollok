@@ -54,7 +54,7 @@ En niveles.wlk se utiliza el onTick para poder definir cómo y cada cuanto va a 
 
 *Diagrama Estático actualizado*:
 
-<img width="704" height="1468" alt="image" src="https://github.com/user-attachments/assets/281958b1-78cb-4947-ab83-ead1154613d1" />
+<img width="623" height="1723" alt="image" src="https://github.com/user-attachments/assets/0ccbfd35-babb-44d0-a1bb-fcabe3894462" />
 
 
 
