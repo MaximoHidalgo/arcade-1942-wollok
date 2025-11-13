@@ -215,7 +215,7 @@ object pantallas inherits ObjetoPasivo {
 ## Polimorfismo y herencia:
 
 El concepto del herencia se puede observar por ejemplo en los enemigosPesados y el objeto Jefe, los cuales heredan la clase Enemigo y por ende conservan sus métodos con algún posible override entre ellos o agregar variables/métodos propios. También los Proyectiles son heredados por proyectilEnemigo. Todo esto se puede observar en el Diagrama Estático presentado previamente.
-Además en niveles.wlk existe una clase llamada Nivel que es heredada luego por los objetos nivel1, nivel2 y nivel3, aunque para esta primera versión sólo tenemos detalles del nivel1.
+Otro ejemplo fuera del diagrama es la clase llamada Nivel que es heredada luego por los objetos nivel1, nivel2 y nivel3, aunque para esta primera versión sólo tenemos detalles del nivel1. Pero en caso de seguir desarrollando el juego, el nivel2, nivel3 y futuros nuevos niveles usarían la misma estructura de Nivel.
 ```
 class Nivel{
     var property enemigos = []
@@ -297,14 +297,12 @@ object nivel1 inherits Nivel(imagenFondo = "videoMapa1.gif", musicaFondo = "musi
         })
     }
 }
-
 object nivel2 inherits Nivel(imagenFondo = "videoMapa2.gif", musicaFondo = "musicaNivel2.mp3") {}
-
 object nivel3 inherits Nivel(imagenFondo = "videoMapa3.gif", musicaFondo = "musicaNivel3.mp3") {}
 ```
 En cuanto al polimorfismo por si sólo lo podemos ver por un lado en el Visual, el cual es una interfaz presente en el diagrama también, que hace que jugador, Enemigos (en todas sus variantes) y Proyectiles puedan ser visualizados con una posición concreta.
 Y, por otro lado, lo podemos observar en las interacciones entre estos objetos, las cuales permiten entre otras cosas que el jugador pierda vidas cuando choca o *colisiona* con un proyectil enemigo o con el enemigo mismo, o que los enemigos mueran cuando son alcanzados por proyectiles del jugador. En el caso de que alguno de estos se quede sin vidas se "muere" el objeto removiendolo visualmente, particularmente en el caso del jugador se termina el juego.
-Es importante destacar que para que el polimorfismo se pueda aprovechar al máximo los proyectiles, enemigos y jugador tienen que entender todos los métodos vinculados a interacciones, aún si pareciera inútil que un jugador colisione con su proyectil o un enemigo choque con otro. Esto se soluciona con métodos que existen pero no hacen nada concreto, pero el objeto sabe de su existencia.
+Es importante destacar que para que el polimorfismo se pueda aprovechar al máximo los proyectiles, enemigos y jugador tienen que entender todos los métodos vinculados a interacciones, aún si pareciera inútil que un jugador colisione con su propio proyectil o un enemigo choque con otro enemigo. Esto se soluciona con métodos que existen pero no hacen nada concreto, pero el objeto sabe de su existencia.
 ```
 class Enemigo {
   //Atributos:
@@ -356,7 +354,7 @@ class Enemigo {
   } 
 } 
 ```
-En el ejemplo de código el Enemigo podría colisionar con otro de su misma clase o con un proyectil de otro enemigo pero no sucede nada.
+En el ejemplo de código anterior el Enemigo podría colisionar con otro de su misma clase o con un proyectil de otro enemigo pero no sucede nada en ninguno de estos casos, a diferencia de los proyectiles del jugador.
 
 
 # 🧠 Grupo El ultimo paradigma
