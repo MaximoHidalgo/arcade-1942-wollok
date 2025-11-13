@@ -436,7 +436,6 @@ En el ejemplo de código anterior el Enemigo podría colisionar con otro de su m
 # 📸 Imagenes del juego
 
 Dentro del juego
-
 ![Ejemplos](imagenes/Imagen9.jpg)
 
 Disparando
@@ -452,8 +451,10 @@ Animación de recibir daño
 ![Ejemplos](imagenes/Imagen5.jpg)
 
 Pantalla cuando ganas la partida
+
 ![Ejemplos](assets/pantalla-victoria.png)
 
 Pantalla cuando moris
+
 ![Ejemplos](assets/pantalla-derrota.png)
 
