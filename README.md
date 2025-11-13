@@ -436,6 +436,7 @@ En el ejemplo de código anterior el Enemigo podría colisionar con otro de su m
 # 📸 Imagenes del juego
 
 Dentro del juego
+
 ![Ejemplos](imagenes/Imagen9.jpg)
 
 Disparando
