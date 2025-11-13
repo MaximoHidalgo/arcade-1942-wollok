@@ -15,12 +15,13 @@ object pantallas inherits ObjetoPasivo {
      
     method pantallaInfoControles() {
         image = "Controles.png"
+        game.schedule(6000,{self.animacionCargando()})
     }
 
     method pantallaDeInicio() {
         image = "Inicio2.png"
         game.sound("sonidoStart.wav").play()
-        game.schedule(700,{self.animacionCargando()})
+        game.schedule(700,{self.pantallaInfoControles()})
     }
 
     method animacionCargando() {
