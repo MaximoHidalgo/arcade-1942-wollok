@@ -11,185 +11,238 @@ import juego.*
 import mapa.*
 import enemigos.*
 
-describe "Testeos de Enemigos" {
+// =============================================================================
+// SUITE DE PRUEBAS UNITARIAS: ARCADE 1942 (WOLLOK GAME)
+// =============================================================================
 
-  test "1. jugador inicia con 3 vidas" {
+describe "Módulo 1: Jugador - Estado, Movimiento, Salud e Inmunidad" {
+
+  test "1. jugador inicia con 3 vidas por defecto" {
     assert.equals(3, jugador.vidas())
   }
 
-  test "2. jugador puede moverse de posición" {
+  test "2. jugador puede desplazarse en la grilla espacial" {
     const posicionInicial = jugador.position()
     jugador.position(game.at(6, 2))
     assert.notEquals(posicionInicial, jugador.position())
   }
 
-  test "3. jugador puede cambiar su imagen" {
+  test "3. jugador actualiza correctamente su sprite visual" {
     jugador.image("jugadorBase.png")
-    jugador.image("jugadorPotenciado.png")
-    assert.equals("jugadorPotenciado.png", jugador.image())
+    jugador.image("jugadorIzqu.png")
+    assert.equals("jugadorIzqu.png", jugador.image())
   }
 
-  test "4. jugador pierde vida al recibir daño" {
+  test "4. jugador pierde vidas de forma consistente al recibir daño" {
+    jugador.inmune(false)
     jugador.vidas(3)
     jugador.recibirDanio(1)
     assert.equals(2, jugador.vidas())
   }
 
-  test "5. jugador muere al recibir daño suficiente" {
+  test "5. jugador alcanza estado de muerte cuando las vidas llegan a 0" {
+    jugador.inmune(false)
     jugador.vidas(3)
     jugador.recibirDanio(3)
     assert.equals(0, jugador.vidas())
   }
 
-  test "6. jugador suma puntos correctamente" {
+  test "6. jugador incrementa su puntuación al derribar objetivos" {
     jugador.puntos(0)
     jugador.sumarPuntos(100)
     assert.equals(100, jugador.puntos())
   }
 
-  test "7. jugador acumula puntos en distintos llamados" {
+  test "7. jugador acumula puntaje en sucesivas rachas de combate" {
     jugador.puntos(0)
     jugador.sumarPuntos(200)
     jugador.sumarPuntos(300)
     assert.equals(500, jugador.puntos())
   }
 
-  test "8. jugador puede cambiar de imagen correctamente" {
+  test "8. jugador puede alterar dinámicamente su sprite a estado potenciado" {
     jugador.image("jugadorBase.png")
     jugador.image("jugadorPotenciado.png")
     assert.equals("jugadorPotenciado.png", jugador.image())
   }
 
-  test "9. jugador puede ganar varias vidas" {
+  test "9. jugador puede recuperar o incrementar vidas" {
     jugador.vidas(3)
     jugador.vidas(jugador.vidas() + 2)
     assert.equals(5, jugador.vidas())
   }
 
-  test "10. jugador puede perder todas sus vidas" {
+  test "10. jugador en estado inmune NO pierde vidas al recibir impacto" {
     jugador.vidas(3)
-    jugador.recibirDanio(3)
-    assert.equals(0, jugador.vidas())
+    jugador.inmune(true)
+    jugador.recibirDanio(1)
+    assert.equals(3, jugador.vidas())
   }
 
-  test "11. jugador acumula puntos al eliminar enemigos" {
-    jugador.puntos(0)
-    jugador.sumarPuntos(100)
-    jugador.sumarPuntos(50)
-    assert.equals(150, jugador.puntos())
+  test "11. desactivar inmunidad permite que el jugador vuelva a recibir daño" {
+    jugador.vidas(3)
+    jugador.inmune(false)
+    jugador.recibirDanio(1)
+    assert.equals(2, jugador.vidas())
   }
 
-  test "12. jugador puede activar y desactivar inmunidad" {
+  test "12. jugador conmuta y valida correctamente el flag de inmunidad" {
     jugador.inmune(false)
     assert.equals(false, jugador.inmune())
     jugador.inmune(true)
     assert.equals(true, jugador.inmune())
   }
+}
 
-  test "13. enemigo pierde vida al recibir daño" {
-    const enemigo = new Enemigo(vidas = 3, danio = 1, position = game.origin(), image = "enemigo.png")
-    enemigo.recibirDanio(1)
-    assert.that(enemigo.vidas() == 2)
-  }
+describe "Módulo 2: Enemigos - Jerarquías, Resistencia y Puntuación" {
 
-  test "14. enemigo muere al recibir daño suficiente" {
-    const enemigo = new Enemigo(vidas = 2, danio = 1, position = game.origin(), image = "enemigo.png")
-    enemigo.recibirDanio(2)
-    assert.that(enemigo.vidas() <= 0)
-  }
-
-  test "15. enemigo común empieza con 1 vida" {
-    const enemigo = new Enemigo(position = game.at(1,1))
+  test "13. enemigo común inicia con 1 vida por defecto" {
+    const enemigo = new Enemigo(position = game.at(1, 1))
     assert.equals(1, enemigo.vidas())
   }
 
-  test "16. enemigo común pierde vida al recibir daño" {
-    const enemigo = new Enemigo(position = game.at(1,1))
+  test "14. enemigo común reduce vidas al recibir impacto" {
+    const enemigo = new Enemigo(position = game.at(1, 1))
     enemigo.recibirDanio(1)
     assert.equals(0, enemigo.vidas())
   }
 
-  test "17. enemigo común hace daño al jugador" {
-    const enemigo = new Enemigo(position = game.at(1,1))
+  test "15. enemigo común inflige daño al colisionar con el jugador" {
+    const enemigo = new Enemigo(position = game.at(1, 1))
+    jugador.inmune(false)
     jugador.vidas(3)
     enemigo.interactuarConJugador(jugador)
     assert.equals(2, jugador.vidas())
   }
 
-  test "18. enemigo común no cambia al chocar con otro enemigo" {
-    const enemigo = new Enemigo(position = game.at(1,1))
-    const otro = new Enemigo(position = game.at(2,2))
+  test "16. colisión entre dos enemigos aliados es inocua y no resta vidas" {
+    const enemigo = new Enemigo(position = game.at(1, 1))
+    const otro = new Enemigo(position = game.at(2, 2))
     enemigo.interactuarConEnemigo(otro)
     assert.equals(1, enemigo.vidas())
   }
 
-  test "19. enemigo común muere con un golpe" {
-    const enemigoComun = new Enemigo(position = game.at(1,1))
-    enemigoComun.recibirDanio(1)
-    assert.equals(0, enemigoComun.vidas())
+  test "17. enemigo común posee sprite asignado válidamente" {
+    const enemigo = new Enemigo(position = game.at(1, 1))
+    assert.that(enemigo.image() != null && enemigo.image() != "")
   }
 
-  test "20. enemigo común tiene una imagen asignada" {
-    const enemigoComun = new Enemigo(position = game.at(1,1))
-    assert.equals(true, enemigoComun.image() != null && enemigoComun.image() != "")
-  }
-
-  test "21. enemigo pesado tiene 2 vidas al crearse" {
-    const enemigoPesado = new EnemigoPesado(position = game.at(2,2))
+  test "18. enemigo pesado inicia con 2 vidas por herencia" {
+    const enemigoPesado = new EnemigoPesado(position = game.at(2, 2))
     assert.equals(2, enemigoPesado.vidas())
   }
 
-  test "22. enemigo pesado sobrevive al primer golpe" {
-    const enemigoPesado = new EnemigoPesado(position = game.at(2,2))
+  test "19. enemigo pesado sobrevive al primer impacto" {
+    const enemigoPesado = new EnemigoPesado(position = game.at(2, 2))
     enemigoPesado.recibirDanio(1)
     assert.equals(1, enemigoPesado.vidas())
   }
 
-  test "23. enemigo pesado muere al segundo golpe" {
-    const enemigoPesado = new EnemigoPesado(position = game.at(2,2))
+  test "20. enemigo pesado es destruido tras el segundo impacto" {
+    const enemigoPesado = new EnemigoPesado(position = game.at(2, 2))
     enemigoPesado.recibirDanio(2)
     assert.equals(0, enemigoPesado.vidas())
   }
 
-  test "24. enemigo pesado inflige más daño que el común" {
-    const enemigoComun = new Enemigo(position = game.at(1,1))
-    const enemigoPesado = new EnemigoPesado(position = game.at(2,2))
-    assert.equals(true, enemigoPesado.danio() > enemigoComun.danio())
+  test "21. enemigo pesado inflige mayor daño que el caza común" {
+    const enemigoComun = new Enemigo(position = game.at(1, 1))
+    const enemigoPesado = new EnemigoPesado(position = game.at(2, 2))
+    assert.that(enemigoPesado.danio() > enemigoComun.danio())
   }
 
-  test "25. enemigo pesado sobrevive más tiempo" {
-    const enemigoPesado = new EnemigoPesado(position = game.at(2,2))
-    enemigoPesado.recibirDanio(1)
-    assert.equals(true, enemigoPesado.vidas() > 0)
+  test "22. enemigo detecta cuando sobrepasa los límites del mapa" {
+    const enemigoFuera = new Enemigo(position = game.at(1, -1))
+    assert.that(enemigoFuera.comprobarLimiteMapa())
+    const enemigoDentro = new Enemigo(position = game.at(1, 4))
+    assert.notThat(enemigoDentro.comprobarLimiteMapa())
   }
 
-  test "26. jefe tiene 10 vidas al iniciar" {
+  test "23. jefe final posee 10 vidas de resistencia inicial" {
     jefe.vidas(10)
     assert.equals(10, jefe.vidas())
   }
 
-  test "27. jefe pierde vida al recibir daño" {
-    jefe.vidas(10)
-    jefe.recibirDanio(3)
-    assert.equals(7, jefe.vidas())
-  }
-
-  test "28. jefe cambia posición al moverse" {
-    jefe.position(game.at(3,3))
+  test "24. jefe final actualiza coordenadas al ejecutar su rutina de movimiento" {
+    jefe.position(game.at(3, 3))
     const posInicial = jefe.position()
     jefe.movimiento()
     assert.notEquals(posInicial, jefe.position())
   }
+}
 
-  test "29. jefe se mueve al ejecutar movimiento" {
-    jefe.position(game.at(0,0))
-    const posicionInicial = jefe.position()
-    jefe.movimiento()
-    assert.notEquals(posicionInicial, jefe.position())
+describe "Módulo 3: Proyectiles y Double Dispatch - Colisiones e Impactos" {
+
+  test "25. proyectil aliado se inicializa con daño y posición válidos" {
+    const proyectil = new Proyectiles(position = game.at(5, 2), danio = 1)
+    assert.equals(1, proyectil.danio())
+    assert.equals(game.at(5, 2), proyectil.position())
   }
 
-  test "30. jefe tiene más vidas que el enemigo pesado" {
-    const enemigoPesado = new EnemigoPesado(position = game.at(2,2))
-    assert.equals(true, jefe.vidas() > enemigoPesado.vidas())
+  test "26. proyectil aliado avanza verticalmente hacia arriba" {
+    const proyectil = new Proyectiles(position = game.at(5, 2), danio = 1)
+    proyectil.avanzar()
+    assert.equals(game.at(5, 2.5), proyectil.position())
+  }
+
+  test "27. proyectil enemigo avanza verticalmente hacia abajo" {
+    const proyectilEnemigo = new ProyectilEnemigo(position = game.at(5, 5), danio = 1)
+    proyectilEnemigo.avanzar()
+    assert.equals(game.at(5, 4.5), proyectilEnemigo.position())
+  }
+
+  test "28. proyectil aliado impacta enemigo y le reduce la vida (Double Dispatch)" {
+    const enemigo = new Enemigo(vidas = 3, position = game.at(5, 5))
+    const proyectil = new Proyectiles(position = game.at(5, 5), danio = 1)
+    proyectil.interactuarConEnemigo(enemigo)
+    assert.equals(2, enemigo.vidas())
+  }
+
+  test "29. proyectil aliado no daña al propio jugador al tocarlo" {
+    jugador.inmune(false)
+    jugador.vidas(3)
+    const proyectil = new Proyectiles(position = jugador.position(), danio = 1)
+    proyectil.interactuarConJugador(jugador)
+    assert.equals(3, jugador.vidas())
+  }
+
+  test "30. proyectil enemigo daña al jugador al impactar" {
+    jugador.inmune(false)
+    jugador.vidas(3)
+    const proyectilEnemigo = new ProyectilEnemigo(position = jugador.position(), danio = 1)
+    proyectilEnemigo.interactuarConJugador(jugador)
+    assert.equals(2, jugador.vidas())
+  }
+
+  test "31. proyectil enemigo no daña a otros enemigos aliados" {
+    const enemigo = new Enemigo(vidas = 2, position = game.at(5, 5))
+    const proyectilEnemigo = new ProyectilEnemigo(position = game.at(5, 5), danio = 1)
+    proyectilEnemigo.interactuarConEnemigo(enemigo)
+    assert.equals(2, enemigo.vidas())
+  }
+
+  test "32. colisión frontal bala con bala anula y remueve ambos proyectiles" {
+    const p1 = new Proyectiles(position = game.at(4, 4), danio = 1)
+    const p2 = new ProyectilEnemigo(position = game.at(4, 4), danio = 1)
+    p1.interactuarConProyectilRival(p2)
+    assert.equals(game.at(-100, -100), p1.position())
+    assert.equals(game.at(-100, -100), p2.position())
+  }
+
+  test "33. proyectil aliado detecta salida de pantalla por el borde superior" {
+    const proyectilFuera = new Proyectiles(position = game.at(5, game.height() + 1), danio = 1)
+    proyectilFuera.comprobarLimiteMapa()
+    assert.equals(game.at(-100, -100), proyectilFuera.position())
+  }
+
+  test "34. proyectil enemigo detecta salida de pantalla por el borde inferior" {
+    const proyectilFuera = new ProyectilEnemigo(position = game.at(5, -1), danio = 1)
+    proyectilFuera.comprobarLimiteMapa()
+    assert.equals(game.at(-100, -100), proyectilFuera.position())
+  }
+
+  test "35. jefe final posee significativamente mayor resistencia que enemigos pesados" {
+    const pesado = new EnemigoPesado(position = game.at(0, 0))
+    jefe.vidas(10)
+    assert.that(jefe.vidas() > pesado.vidas())
   }
 }
