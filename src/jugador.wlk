@@ -1,3 +1,4 @@
+import controladorDeNivel.*
 import wollok.game.*
 import controladorDePantallas.*
 import niveles.*
@@ -29,7 +30,7 @@ object jugador {
   method ataque() {
     const proyectil = new Proyectiles(position = self.position(), danio = 1)
     proyectil.spawnDisparo(self.position())
-    nivel1.proyectiles().add(proyectil)
+    nivelManager.actual().proyectiles().add(proyectil)
   }
   
   method recibirDanio(danio) {

@@ -246,3 +246,40 @@ describe "Módulo 3: Proyectiles y Double Dispatch - Colisiones e Impactos" {
     assert.that(jefe.vidas() > pesado.vidas())
   }
 }
+describe "Módulo 4: Nivel 2 - Bombarderos Explosivos, Proyectiles Direccionales y Jefe Final" {
+
+  test "36. bombardero pesado inicia con 2 vidas y sprite explosivo carmesí" {
+    const bombardero = new EnemigoPesadoExplosivo(position = game.at(2, 2))
+    assert.equals(2, bombardero.vidas())
+    assert.equals("enemigoExplosivo.png", bombardero.image())
+  }
+
+  test "37. proyectil direccional aplica correctamente el vector de avance en cono" {
+    const pDiagonal = new ProyectilDireccional(position = game.at(5, 5), danio = 1, dirX = 0.3, dirY = -0.5)
+    pDiagonal.avanzar()
+    assert.equals(game.at(5.3, 4.5), pDiagonal.position())
+  }
+
+  test "38. proyectil explosivo conmuta sprite de parpadeo antes de detonar" {
+    const bomba = new ProyectilExplosivo(position = game.at(4, 6), danio = 1)
+    bomba.avanzar()
+    assert.equals("proyectilBombaBlink.png", bomba.image())
+  }
+
+  test "39. jefe de nivel 2 inicia con 16 vidas y estado de furia desactivado" {
+    jefeNivel2.vidas(16)
+    jefeNivel2.enFuria(false)
+    assert.equals(16, jefeNivel2.vidas())
+    assert.notThat(jefeNivel2.enFuria())
+    assert.equals("jefeNivel2.png", jefeNivel2.image())
+  }
+
+  test "40. jefe de nivel 2 activa Fase de Furia al reducirse su salud al 50%" {
+    jefeNivel2.vidas(16)
+    jefeNivel2.enFuria(false)
+    jefeNivel2.image("jefeNivel2.png")
+    jefeNivel2.recibirDanio(8) // Baja a 8 vidas
+    assert.that(jefeNivel2.enFuria())
+    assert.equals("jefeNivel2Furia.png", jefeNivel2.image())
+  }
+}

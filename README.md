@@ -19,7 +19,7 @@
 [![Language: Wollok](https://img.shields.io/badge/Language-Wollok-e03131.svg?style=for-the-badge&logo=wollok&logoColor=white)](https://www.wollok.org/)
 [![Engine: Wollok Game](https://img.shields.io/badge/Engine-Wollok%20Game-2563eb.svg?style=for-the-badge)](#)
 [![Paradigm: OOP](https://img.shields.io/badge/Paradigm-Pure%20OOP-ea580c.svg?style=for-the-badge)](#)
-[![Tests: 35 Passed](https://img.shields.io/badge/Tests-35%20Unit%20Tests%20Passing-16a34a.svg?style=for-the-badge)](#)
+[![Tests: 40 Passed](https://img.shields.io/badge/Tests-40%20Unit%20Tests%20Passing-16a34a.svg?style=for-the-badge)](#)
 [![Status: Completed](https://img.shields.io/badge/Status-Completed%20%26%20Approved-059669.svg?style=for-the-badge)](#)
 
 <br><br>
@@ -44,7 +44,7 @@
   * [3. State Pattern y Controladores de Pantallas](#3-state-pattern-y-controladores-de-flujo)
   * [4. Game Loop, Temporizadores y Spawners Reactivos](#4-game-loop-temporizadores-y-spawners-reactivos)
 * [📐 Diagramas Estáticos (UML)](#-diagramas-estáticos-uml)
-* [🧪 Pruebas Unitarias Automatizadas (35 Tests)](#-pruebas-unitarias-automatizadas)
+* [🧪 Pruebas Unitarias Automatizadas (40 Tests)](#-pruebas-unitarias-automatizadas)
 * [📸 Galería Visual del Juego](#-galería-visual-del-juego)
 * [🚀 Cómo Ejecutar el Proyecto](#-cómo-ejecutar-el-proyecto)
 * [📖 Informe Detallado Entrega por Entrega](docs/EXPLICACION_COMPLETA.md)
@@ -66,7 +66,7 @@ El desafío técnico no fue solo replicar la estética y jugabilidad retro, sino
 * **Double Dispatch** para evitar estructuras condicionales frágiles al resolver colisiones e interacciones.
 * **Polimorfismo puro y herencia con redefinición (`override`)** para gestionar oleadas de combatientes con atributos y comportamientos diferenciados.
 * **Separación de responsabilidades** entre la lógica del jugador, los administradores de nivel, el motor de pantallas y el HUD visual.
-* **Diseño testeable con 35 casos de prueba unitarios** cubriendo la integridad del modelo.
+* **Diseño testeable con 40 casos de prueba unitarios** cubriendo la integridad del modelo.
 
 ---
 
@@ -168,7 +168,7 @@ El ciclo de juego en [`src/niveles.wlk`](src/niveles.wlk) utiliza eventos perió
 
 ## 🧪 Pruebas Unitarias Automatizadas
 
-La suite en [`src/Test.wtest`](src/Test.wtest) contiene **35 casos de prueba automatizados** que certifican el correcto modelado de objetos:
+La suite en [`src/Test.wtest`](src/Test.wtest) contiene **40 casos de prueba automatizados** que certifican el correcto modelado de objetos:
 
 * **Módulo Jugador (Tests 1 al 12):** Validación de puntos de vida iniciales (3), desplazamiento espacial, alteración de sprites, decremento de vidas por daño recibido, umbrales de muerte, acumulación incremental de puntuación y activación/desactivación del escudo de inmunidad.
 * **Módulo Enemigos (Tests 13 al 25):** Vida y daño diferencial entre unidades estándar y acorazadas, neutralización con proyectiles, colisión dañina con el jugador e inocuidad en colisiones entre naves aliadas.

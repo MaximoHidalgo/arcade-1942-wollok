@@ -10,17 +10,18 @@ import musica.*
 //---------------------------------
 
 object nivelManager {
-    const property niveles = [nivel1]
+    const property niveles = [nivel1, nivel2]
     var property actual = pantallas
 
     method iniciarSigNivel() {
         if (niveles.isEmpty()) {
             juego.estado(cargando)
-            pantallas.pantallaFinalizacion("pantalla-victoria.png","sonidoVictoria.wav")
+            pantallas.pantallaFinalizacion("pantalla-victoria.png", "sonidoVictoria.wav")
+        } else {
+            actual = niveles.first()
+            actual.iniciar()
+            niveles.remove(actual)
         }
-        actual = niveles.first()
-        actual.iniciar()
-        niveles.remove(actual)
     }
 
     method terminarNivel(){
@@ -32,5 +33,4 @@ object nivelManager {
         game.clear()
         musicaDeFondo.stop()
     }
-
 }

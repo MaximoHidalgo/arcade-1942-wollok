@@ -1,6 +1,8 @@
 import wollok.game.*
 
 class ObjetoPasivo{
+    var property proyectiles = []
+    var property enemigos = []
     method interactuarCon(otro) {} // no hace nada
     method interactuarConJugador(jugador) {}
     method interactuarConEnemigo(enemigo) {}
