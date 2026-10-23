@@ -25,6 +25,7 @@ object nivelManager {
     }
 
     method terminarNivel(){
+        actual.limpiarColecciones()
         self.limpieza()
         pantallas.animacionCargando()
     }

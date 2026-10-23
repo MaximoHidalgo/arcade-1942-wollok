@@ -12,6 +12,7 @@ class Enemigo {
   var property vidas = 1
   var property danio = 1
   var property image = "enemigo.png"
+  var property activo = true
 
   method interactuarCon(otro) {
     otro.interactuarConEnemigo(self)
@@ -38,8 +39,13 @@ class Enemigo {
   }
   
   method remover(){
-    game.removeVisual(self)
-    nivelManager.actual().enemigos().remove(self)
+    if (activo) {
+      activo = false
+      if (game.allVisuals().contains(self)) {
+        game.removeVisual(self)
+      }
+      nivelManager.actual().enemigos().remove(self)
+    }
   }
 
   method comprobarMorir() {
@@ -118,7 +124,7 @@ object jefe inherits Enemigo (vidas = 10, danio = 2, position = game.at(0,6), im
       jugador.sumarPuntos(3000)
       cantPuntos.actualizar(jugador.puntos())
       // Transición hacia el Nivel 2
-      game.schedule(2000, { nivelManager.terminarNivel() })
+      game.schedule(1500, { nivelManager.terminarNivel() })
     } else if (self.comprobarLimiteMapa()) {
       self.remover()
     }
@@ -162,6 +168,7 @@ object jefeNivel2 inherits Enemigo (vidas = 16, danio = 3, position = game.at(0,
       enFuria = true
       self.image("jefeNivel2Furia.png")
       game.sound("vueloEnemigo.wav").play()
+      self.soltarBomba()
     }
     self.comprobarMorir()
   }
@@ -174,7 +181,7 @@ object jefeNivel2 inherits Enemigo (vidas = 16, danio = 3, position = game.at(0,
       game.removeTickEvent("bombaJefe2")
       jugador.sumarPuntos(5000)
       cantPuntos.actualizar(jugador.puntos())
-      // Fin del juego -> Victoria definitiva
+      // Fin del juego -> Pantalla de victoria final
       game.schedule(2000, { nivelManager.iniciarSigNivel() })
     } else if (self.comprobarLimiteMapa()) {
       self.remover()

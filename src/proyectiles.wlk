@@ -9,6 +9,7 @@ class Proyectiles {
   var property position
   var property danio
   var property image = "proyectiles.png"
+  var property activo = true
 
   method interactuarCon(otro){
     otro.interactuarConProyectil(self)
@@ -36,13 +37,18 @@ class Proyectiles {
   }
   
   method remover(){	
-    game.removeVisual(self)
-    self.position(game.at(-100, -100))
-    nivelManager.actual().proyectiles().remove(self)
+    if (activo) {
+      activo = false
+      if (game.allVisuals().contains(self)) {
+        game.removeVisual(self)
+      }
+      self.position(game.at(-100, -100))
+      nivelManager.actual().proyectiles().remove(self)
+    }
   }
   
   method comprobarLimiteMapa(){
-    if (self.position().y() > game.height() - 1 || self.position().y() < 0 || self.position().x() < 0 || self.position().x() > game.width() - 1) {
+    if (self.position().y() >= game.height() - 1 || self.position().y() < 0 || self.position().x() < 0 || self.position().x() > game.width() - 1) {
       self.remover()
     }
   }

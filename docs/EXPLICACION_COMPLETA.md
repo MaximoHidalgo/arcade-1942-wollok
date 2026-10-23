@@ -38,6 +38,14 @@
     - [Explicación del controlador de pantallas:](#explicación-del-controlador-de-pantallas)
   - [Polimorfismo y herencia:](#polimorfismo-y-herencia)
 - [📸 Imagenes del juego](#-imagenes-del-juego)
+  - [🚀 Evolución y Extensión: Implementación del Nivel 2 y Gestión Avanzada de Niveles](#-evolución-y-extensión-implementación-del-nivel-2-y-gestión-avanzada-de-niveles)
+    - [1. Arquitectura de Múltiples Niveles (`nivelManager`)](#1-arquitectura-de-múltiples-niveles-nivelmanager)
+    - [2. Nivel 2: Asedio Aéreo Avanzado](#2-nivel-2-asedio-aéreo-avanzado)
+    - [3. Nuevas Mecánicas de Combate y Proyectiles](#3-nuevas-mecánicas-de-combate-y-proyectiles)
+    - [4. Jefe del Nivel 2 (`jefeNivel2`): Mecánicas Reactivas](#4-jefe-del-nivel-2-jefenivel2-mecánicas-reactivas)
+    - [5. Optimizaciones Críticas del Motor de Juego y Solución de Bugs](#5-optimizaciones-críticas-del-motor-de-juego-y-solución-de-bugs)
+    - [6. Cobertura de la Suite de Pruebas Automatizadas (42 Tests)](#6-cobertura-de-la-suite-de-pruebas-automatizadas-42-tests)
+- [Referencias](#referencias)
 
 ## 📄 Consigna: [Pautas - TP Juegos Objetos 2025](https://docs.google.com/document/d/12Gj_MrR9fLi926D66XO_tRvhrnWc4T2gjpfusKGZy0I/edit?tab=t.0#heading=h.wnm2lu4cls8j)
 
@@ -444,7 +452,7 @@ class Enemigo {
 ```
 En el ejemplo de código anterior el Enemigo podría colisionar con otro de su misma clase o con un proyectil de otro enemigo pero no sucede nada en ninguno de estos casos, a diferencia de los proyectiles del jugador.
 
-# 📸 Imagenes del juego
+# 📸 
 
 Dentro del juego
 ![Ejemplos](../imagenes/Imagen9.jpg)
@@ -469,6 +477,312 @@ Pantalla cuando morís
 
 ![Ejemplos](../assets/pantalla-derrota.png)
 
+
+---
+
+---
+
+# 🚀 Evolución y Extensión: Implementación del Nivel 2 y Gestión Avanzada de Niveles
+
+Tras la presentación original de la Entrega 3, el proyecto evolucionó para incorporar una arquitectura **multi-nivel escalable**, introduciendo un **Nivel 2 completo** con enemigos inéditos, proyectiles balísticos en cono y racimo, un nuevo jefe con mecánicas reactivas de dos fases, optimizaciones críticas de rendimiento y una ampliación de la suite a **42 tests unitarios automatizados**.
+
+---
+
+## 1. Arquitectura de Múltiples Niveles (`nivelManager`)
+
+En la versión inicial del prototipo, el juego estaba acoplado a un único objeto `nivel1`. Cuando el primer jefe moría, se invocaba de manera directa la pantalla de victoria y el motor detenía el juego con `game.stop()`.
+
+Para soportar progresión secuencial sin acoplamiento, se refactorizó la arquitectura bajo un modelo de **gestión desacoplada por colas**:
+
+```
+                       ┌────────────────────────────┐
+                       │        nivelManager        │
+                       │  • niveles = [n1, n2, ...] │
+                       │  • actual = nivelActivo    │
+                       └─────────────┬──────────────┘
+                                     │
+           ┌─────────────────────────┴─────────────────────────┐
+           ▼                                                   ▼
+┌──────────────────────┐                             ┌──────────────────────┐
+│  iniciarSigNivel()   │                             │   terminarNivel()    │
+│  - Toma primer nivel │                             │  - Limpia listas     │
+│  - Invoca .iniciar() │                             │  - game.clear()      │
+│  - Si lista vacía    │                             │  - Activa animación  │
+│    => Victoria Final │                             │    de carga (3.5s)   │
+└──────────────────────┘                             └──────────────────────┘
+```
+
+### Implementación en `src/controladorDeNivel.wlk`
+```wollok
+object nivelManager {
+    const property niveles = [nivel1, nivel2]
+    var property actual = pantallas
+
+    method iniciarSigNivel() {
+        if (niveles.isEmpty()) {
+            juego.estado(cargando)
+            pantallas.pantallaFinalizacion("pantalla-victoria.png", "sonidoVictoria.wav")
+        } else {
+            actual = niveles.first()
+            actual.iniciar()
+            niveles.remove(actual)
+        }
+    }
+
+    method terminarNivel(){
+        actual.limpiarColecciones()
+        self.limpieza()
+        pantallas.animacionCargando()
+    }
+
+    method limpieza(){
+        game.clear()
+        musicaDeFondo.stop()
+    }
+}
+```
+
+### Trade-offs y Decisiones de Diseño:
+* **Lista Dinámica como Cola FIFO:** `niveles.first()` extrae el nivel actual y `niveles.remove(actual)` lo desencola. Esto permite agregar un `nivel3`, `nivel4` o niveles de bonificación simplemente agregándolos a la colección inicial sin tocar la lógica de transición.
+* **Aislamiento de Estado con `limpiarColecciones()`:** Los objetos nivel conservan sus colecciones `enemigos` y `proyectiles`. Al invocar `actual.limpiarColecciones()`, se asegura que ningún puntero o referencia de proyectiles destruidos persista en memoria entre niveles.
+* **Transición Asíncrona Controlada:** `pantallas.animacionCargando()` proyecta `cargando.gif` y reproduce `audioCargando.wav` durante 3.5 segundos antes de convocar automáticamente a `iniciarSigNivel()`, otorgándole al jugador un respiro táctico antes de la siguiente oleada.
+
+---
+
+## 2. Nivel 2: Asedio Aéreo Avanzado
+
+El **Nivel 2** sitúa el combate sobre territorio costero e islas oceánicas fortificadas, aumentando deliberadamente la densidad táctica de la batalla.
+
+```wollok
+object nivel2 inherits Nivel(imagenFondo = "videoMapa2.gif", musicaFondo = "musicaNivel1.mp3") {
+    // Configuración especializada de spawners y rutinas tácticas
+}
+```
+
+### Ambientación Dinámica (`videoMapa2.gif`):
+* En la entrega original, el Nivel 1 empleaba un GIF animado (`videoMapa1.gif`), pero el Nivel 2 había quedado configurado con una imagen fija (`mapa2.png`).
+* Se procesó el archivo de video de alta definición original del repositorio ([assets/mapas/E2.wmv](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/assets/mapas/E2.wmv), 863 cuadros a 24 FPS) mediante un pipeline de muestreo a 12 FPS (432 cuadros) escalado a la resolución estándar del tablero (450x360).
+* El archivo resultante [assets/videoMapa2.gif](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/assets/videoMapa2.gif) provee un scrolling vertical continuo y fluido de 36 segundos de duración exacta, cubriendo toda la progresión hasta la llegada del jefe final.
+
+### Rebalanceo Táctico de Enemigos:
+* Se **eliminan por completo los cazas comunes** (los cuales se movían en línea recta sin disparar).
+* Se acelera la cadencia de aparición de los **Cazas Rápidos** a cada 2.5 segundos (velocidad de avance de 400ms por celda).
+* Se intensifica la presencia de los **Cazas Pesados** a cada 6 segundos (disparo cada 3 segundos).
+* Se incorporan los nuevos **Bombarderos Pesados Explosivos** cada 7 segundos.
+
+---
+
+## 3. Nuevas Mecánicas de Combate y Proyectiles
+
+Para enriquecer el combate sin romper el principio de responsabilidad única ni el polimorfismo existente, se derivaron dos nuevas clases de proyectiles sobre la jerarquía base de [src/proyectiles.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/proyectiles.wlk):
+
+```
+                       ┌────────────────────────────┐
+                       │        Proyectiles         │
+                       └─────────────┬──────────────┘
+                                     │
+                       ┌─────────────┴──────────────┐
+                       │      ProyectilEnemigo      │
+                       └─────────────┬──────────────┘
+                                     │
+           ┌─────────────────────────┴─────────────────────────┐
+           ▼                                                   ▼
+┌──────────────────────────────┐              ┌──────────────────────────────┐
+│     ProyectilDireccional     │              │      ProyectilExplosivo      │
+│  • dirX, dirY                │              │  • ticksParaDetonar (8)      │
+│  • Avance vectorial en cono  │              │  • Parpadeo (Blink State)    │
+│    y esquirlas               │              │  • Detonación en cruz (4 pro)│
+└──────────────────────────────┘              └──────────────────────────────┘
+```
+
+### A. Proyectil Direccional (`ProyectilDireccional`)
+Permite definir vectores bidimensionales de desplazamiento `(dirX, dirY)` para disparos angulares, en cono o esquirlas balísticas:
+```wollok
+class ProyectilDireccional inherits ProyectilEnemigo {
+  var property dirX = 0
+  var property dirY = -0.5
+
+  override method avanzar() {
+    self.position(self.position().right(dirX).up(dirY))
+  }
+}
+```
+
+### B. Proyectil Explosivo en Racimo (`ProyectilExplosivo`)
+Desciende a velocidad controlada (-0.2 celdas por tick). En cada avance decrementa un contador y conmuta su sprite entre `proyectilBomba.png` y `proyectilBombaBlink.png` para generar una advertencia visual de detonación inminente:
+```wollok
+class ProyectilExplosivo inherits ProyectilEnemigo (image = "proyectilBomba.png") {
+  var property ticksParaDetonar = 8
+  var property blinkState = false
+
+  override method avanzar() {
+    self.position(self.position().down(0.2))
+    self.verificarDetonacion()
+  }
+
+  method verificarDetonacion() {
+    ticksParaDetonar -= 1
+    blinkState = !blinkState
+    if (blinkState) self.image("proyectilBombaBlink.png")
+    else self.image("proyectilBomba.png")
+
+    if (ticksParaDetonar <= 0) self.detonar()
+  }
+
+  method detonar() {
+    game.sound("impactoProyectiles.wav").play()
+    const pos = self.position()
+    self.remover()
+
+    const pArriba = new ProyectilDireccional(position = pos, danio = 1, dirX = 0, dirY = 0.5, image = "proyectilFragmento.png")
+    const pAbajo  = new ProyectilDireccional(position = pos, danio = 1, dirX = 0, dirY = -0.5, image = "proyectilFragmento.png")
+    const pIzq    = new ProyectilDireccional(position = pos, danio = 1, dirX = -0.5, dirY = 0, image = "proyectilFragmento.png")
+    const pDer    = new ProyectilDireccional(position = pos, danio = 1, dirX = 0.5, dirY = 0, image = "proyectilFragmento.png")
+
+    const fragmentos = [pArriba, pAbajo, pIzq, pDer]
+    fragmentos.forEach({ f =>
+      f.spawnDisparo(f.position())
+      nivelManager.actual().proyectiles().add(f)
+    })
+  }
+}
+```
+
+### C. Bombardero Pesado (`EnemigoPesadoExplosivo`)
+Subclase de `EnemigoPesado` con sprite distintivo carmesí (`enemigoExplosivo.png`), 2 puntos de vida y ataque adaptado para lanzar `ProyectilExplosivo`.
+
+---
+
+## 4. Jefe del Nivel 2 (`jefeNivel2`): Mecánicas Reactivas
+
+El Jefe del Nivel 2 (acorazado naval imperial con 16 puntos de vida y daño por colisión de 3) incorpora un patrón de combate multi-fase enriquecido:
+
+```
+                      ┌──────────────────────────────────────────────┐
+                      │          JEFE DE NIVEL 2 (16 HP)             │
+                      └──────────────────────┬───────────────────────┘
+                                             │
+                   ┌─────────────────────────┴─────────────────────────┐
+                   ▼                                                   ▼
+       【OPCIÓN C: Bombas de Racimo】                       【OPCIÓN A: Fase de Furia】
+       • Cada 6s suelta ProyectilExplosivo                 • Se activa al llegar a <= 50% vida (8 HP)
+       • Parpadea en advertencia (Blink)                   • Cambia al sprite `jefeNivel2Furia.png`
+       • Detona en 4 esquirlas en cruz                     • Ráfaga en cono pasa de 3 a 5 disparos
+                                                           • Suelta bomba inmediata de represalia
+```
+
+### Código de Comportamiento en `src/enemigos.wlk`:
+```wollok
+object jefeNivel2 inherits Enemigo (vidas = 16, danio = 3, position = game.at(0,6), image = "jefeNivel2.png") {
+  var property enFuria = false
+
+  override method recibirDanio(danioProyectil){
+    vidas = vidas - danioProyectil
+    game.sound("impactoAEnemigo.wav").play()
+    
+    // OPCION A: Fase de Furia al llegar a <= 8 vidas (50%)
+    if (vidas <= 8 && !enFuria) {
+      enFuria = true
+      self.image("jefeNivel2Furia.png")
+      game.sound("vueloEnemigo.wav").play()
+      self.soltarBomba() // Represalia inmediata
+    }
+    self.comprobarMorir()
+  }
+
+  // Ataque en Cono Dinámico (3 disparos en fase normal, 5 disparos en fase de furia)
+  method ataque(){
+    const pos = self.position()
+    if (!enFuria) {
+      const pIzq    = new ProyectilDireccional(position = pos, danio = 1, dirX = -0.3, dirY = -0.5, image = "proyectilesJefe1.png")
+      const pCentro = new ProyectilDireccional(position = pos, danio = 1, dirX = 0, dirY = -0.5, image = "proyectilesJefe1.png")
+      const pDer    = new ProyectilDireccional(position = pos, danio = 1, dirX = 0.3, dirY = -0.5, image = "proyectilesJefe1.png")
+      [pIzq, pCentro, pDer].forEach({ p =>
+        p.spawnDisparo(p.position())
+        nivelManager.actual().proyectiles().add(p)
+      })
+    } else {
+      const pExtIzq = new ProyectilDireccional(position = pos, danio = 1, dirX = -0.5, dirY = -0.4, image = "proyectilFragmento.png")
+      const pIzq    = new ProyectilDireccional(position = pos, danio = 1, dirX = -0.25, dirY = -0.5, image = "proyectilesJefe1.png")
+      const pCentro = new ProyectilDireccional(position = pos, danio = 1, dirX = 0, dirY = -0.5, image = "proyectilFragmento.png")
+      const pDer    = new ProyectilDireccional(position = pos, danio = 1, dirX = 0.25, dirY = -0.5, image = "proyectilesJefe1.png")
+      const pExtDer = new ProyectilDireccional(position = pos, danio = 1, dirX = 0.5, dirY = -0.4, image = "proyectilFragmento.png")
+      [pExtIzq, pIzq, pCentro, pDer, pExtDer].forEach({ p =>
+        p.spawnDisparo(p.position())
+        nivelManager.actual().proyectiles().add(p)
+      })
+    }
+  }
+
+  // OPCION C: Bombas de racimo periódicas
+  method soltarBomba(){
+    const bomba = new ProyectilExplosivo(position = self.position(), danio = 1)
+    bomba.spawnDisparo(self.position())
+    nivelManager.actual().proyectiles().add(bomba)
+  }
+}
+```
+
+---
+
+## 5. Optimizaciones Críticas del Motor de Juego y Solución de Bugs
+
+Durante la fase de playtesting técnico del Nivel 2 se identificaron y resolvieron 4 problemas profundos de arquitectura y rendimiento:
+
+### A. Idempotencia en el Sistema de Audio (Corrección del Crash al Morir el Jefe)
+* **Síntoma:** Al derrotar al primer jefe, la aplicación se cerraba abruptamente con el error `EvaluationError: Error: You cannot stop a sound that is not played`.
+* **Causa Raíz:** `nivelManager.limpieza()` ejecutaba `musicaDeFondo.stop()`, deteniendo la pista activa. Inmediatamente después, `pantallas.animacionCargando()` ejecutaba `musicaDeFondo.play("audioCargando.wav")`, cuyo código interno intentaba volver a detener la pista anterior. En Wollok Game, invocar `.stop()` sobre un sonido que no se encuentra en estado `played` arroja una excepción no capturada que finaliza el proceso de Node.
+* **Solución:** En [src/musica.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/musica.wlk), se protegió la llamada validando `if (temaActual != null && temaActual.played()) temaActual.stop()`, seteando luego la referencia a `null`.
+
+### B. Mitigación de Saturación de Disparos (Anti-Lag Cadence)
+* **Síntoma:** Disparar de forma continua o mantener presionada la tecla `X` provocaba una caída severa de los FPS.
+* **Causa Raíz:** Los eventos de teclado repetidos por el sistema operativo ejecutaban `jugador.ataque()` hasta 50 veces por segundo, creando decenas de objetos `Proyectiles`, asociando listeners de colisión y abriendo docenas de buffers de audio concurrentes en el navegador.
+* **Solución:** Se implementó una cadencia con cooldown de 150ms en [src/jugador.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/jugador.wlk) mediante `puedeDisparar = false` y `game.schedule(150, { puedeDisparar = true })`. Esto garantiza una respuesta ágil de hasta 6.6 disparos/segundo (típica de arcade) sin saturar la CPU.
+
+### C. Polimorfismo Estricto en los Dígitos del HUD (`DigitoPuntaje`)
+* **Síntoma:** La consola de Wollok se inundaba con miles de excepciones:
+  ```text
+  wollok.lang.MessageNotUnderstoodException: an Object does not understand interactuarConProyectil(arg 0)
+  ```
+* **Causa Raíz:** En [src/hud.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/hud.wlk), los números del marcador se creaban como objetos anónimos literales (`object { var property image ... }`) sin heredar de `ObjetoPasivo`. Como están ubicados en la fila `y = 7`, cualquier proyectil o enemigo que alcanzaba esa coordenada intentaba resolver el *Double Dispatch* (`digito.interactuarConProyectil(self)`), lanzando excepciones continuas que colapsaban la tasa de refresco.
+* **Solución:** Se creó formalmente la clase `DigitoPuntaje inherits ObjetoPasivo`. Al heredar la interfaz pasiva completa, ignora limpiamente cualquier interacción física. Además, se ajustó el límite superior de los proyectiles a `y >= game.height() - 1` para removerlos antes de que invadan la franja del HUD.
+
+### D. Iteración Segura sobre Copias Defensivas
+* **Síntoma:** Balas aliadas y enemigas desaparecían de los chequeos o atravesaban el mapa sin interactuar.
+* **Causa Raíz:** `moverProyectiles` ejecutaba `proyectiles.forEach(...)`. Al invocar `remover()`, la lista mutaba durante la iteración, provocando saltos de índice en el motor de JavaScript y omitiendo elementos.
+* **Solución:** En [src/niveles.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/niveles.wlk), todos los ciclos de movimiento iteran sobre copias inmutables del estado: `proyectiles.copy().forEach(...)` y `enemigos.copy().forEach(...)`.
+
+---
+
+## 6. Cobertura de la Suite de Pruebas Automatizadas (42 Tests)
+
+La suite de pruebas automatizadas contenida en [src/Test.wtest](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/Test.wtest) se estructuró en 4 módulos que cubren la totalidad de los requisitos funcionales del motor:
+
+| Módulo | Alcance Técnico | Casos | Estado |
+|---|---|:---:|:---:|
+| **Módulo 1: Jugador** | Estado, movimiento, salud, vidas, sistema de puntos, inmunidad temporal y conmutación de sprites. | 12 | `✓ Passed` |
+| **Módulo 2: Enemigos** | Jerarquía (`Enemigo`, `EnemigoPesado`, `jefe`), resistencia, colisiones aliadas, daño y límites de mapa. | 12 | `✓ Passed` |
+| **Módulo 3: Proyectiles y Double Dispatch** | Inicialización balística, avance direccional, anulación bala con bala y límites de mapa. | 11 | `✓ Passed` |
+| **Módulo 4: Nivel 2, Balística y Audio** | Bombardero pesado explosivo, vectores en cono, parpadeo de bombas, fases de furia del jefe 2, cadencia anti-lag e idempotencia de audio. | 7 | `✓ Passed` |
+| **Total** | **Cobertura Integral de Reglas de Negocio** | **42** | **`100% Passed`** |
+
+---
+
+# Referencias
+
+1. **Wollok Language & Game Documentation:**
+   * Sitio Oficial de Wollok: [https://www.wollok.org/](https://www.wollok.org/)
+   * CLI de Wollok-TS en GitHub: [https://github.com/uqbar-project/wollok-ts-cli](https://github.com/uqbar-project/wollok-ts-cli)
+2. **Archivos Fuente del Repositorio:**
+   * Controlador de Niveles: [src/controladorDeNivel.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/controladorDeNivel.wlk)
+   * Controlador de Pantallas: [src/controladorDePantallas.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/controladorDePantallas.wlk)
+   * Niveles y Spawners: [src/niveles.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/niveles.wlk)
+   * Jerarquía de Enemigos y Jefes: [src/enemigos.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/enemigos.wlk)
+   * Proyectiles Direccionales y Explosivos: [src/proyectiles.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/proyectiles.wlk)
+   * Modelo del Jugador y Cadencia: [src/jugador.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/jugador.wlk)
+   * HUD y Dígitos Polimórficos: [src/hud.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/hud.wlk)
+   * Gestor de Audio e Idempotencia: [src/musica.wlk](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/musica.wlk)
+   * Suite de Pruebas Unitarias: [src/Test.wtest](file:///c:/Users/asus/OneDrive/Escritorio/FACULTAD%20MAX/arcade-1942-wollok/src/Test.wtest)
 
 ---
 

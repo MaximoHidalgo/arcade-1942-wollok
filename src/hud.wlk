@@ -10,6 +10,11 @@ class ObjetoPasivo{
     method interactuarConProyectilRival(proy) {}
 }
 
+class DigitoPuntaje inherits ObjetoPasivo {
+    var property image
+    var property position
+}
+
 object hud inherits ObjetoPasivo {
     method dibujar() {
         game.addVisual(barra)
@@ -52,10 +57,10 @@ object cantPuntos inherits ObjetoPasivo {
 
         texto.length().times({ i =>
             const numero = texto.charAt(i - 1)
-            const digito = object {
-                var property image = numero + ".png"
-                var property position = game.at(6 + (i - 1), 7)
-            }
+            const digito = new DigitoPuntaje(
+                image = numero + ".png",
+                position = game.at(6 + (i - 1), 7)
+            )
             digits.add(digito)
             game.addVisual(digito)
         })

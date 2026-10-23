@@ -282,4 +282,15 @@ describe "Módulo 4: Nivel 2 - Bombarderos Explosivos, Proyectiles Direccionales
     assert.that(jefeNivel2.enFuria())
     assert.equals("jefeNivel2Furia.png", jefeNivel2.image())
   }
+test "41. jugador activa cooldown de cadencia tras disparar evitando saturacion de proyectiles" {
+    jugador.puedeDisparar(true)
+    jugador.ataque()
+    assert.notThat(jugador.puedeDisparar())
+  }
+
+  test "42. sistema de audio detiene pistas de forma idempotente sin arrojar excepcion" {
+    musicaDeFondo.stop()
+    musicaDeFondo.stop() // Segunda llamada consecutiva segura
+    assert.equals(null, musicaDeFondo.temaActual())
+  }
 }

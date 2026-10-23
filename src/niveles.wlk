@@ -16,6 +16,7 @@ class Nivel{
     var property musicaFondo
 
     method iniciar() {
+        self.limpiarColecciones()
         mapa.visualizarCon(imagenFondo)
         musicaDeFondo.play(musicaFondo)
         game.addVisualCharacter(jugador)
@@ -23,6 +24,11 @@ class Nivel{
         hud.dibujar()
         self.iniciarSpawners()
         self.configurarColisiones()
+    }
+
+    method limpiarColecciones() {
+        enemigos.clear()
+        proyectiles.clear()
     }
 
     method configurarControles() {
@@ -53,7 +59,7 @@ object nivel1 inherits Nivel(imagenFondo = "videoMapa1.gif", musicaFondo = "musi
         })
         
         game.onTick(1000, "moverEnemigo", {
-            enemigos.filter({e => e.image() == "enemigo.png"}).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
+            enemigos.copy().filter({e => e.image() == "enemigo.png"}).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
         })
 
         game.onTick(4000, "spawnEnemigosRapidos", {
@@ -63,7 +69,7 @@ object nivel1 inherits Nivel(imagenFondo = "videoMapa1.gif", musicaFondo = "musi
         })
 
         game.onTick(500, "moverEnemigoRapido", {
-            (enemigos.filter({e => e.image() == "enemigoRapido.png"})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
+            (enemigos.copy().filter({e => e.image() == "enemigoRapido.png"})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
         })
 
         game.onTick(8000, "spawnEnemigoPesado", {
@@ -73,15 +79,15 @@ object nivel1 inherits Nivel(imagenFondo = "videoMapa1.gif", musicaFondo = "musi
         })
 
         game.onTick(3000, "moverEnemigoPesado", {
-            (enemigos.filter({e => e.image() == "enemigoPesado.png"})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
+            (enemigos.copy().filter({e => e.image() == "enemigoPesado.png"})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
         }) 
 
         game.onTick(4000, "disparoEnemigoPesado",{
-            (enemigos.filter({e => e.image() == "enemigoPesado.png"})).forEach({enemigo => enemigo.ataque()})
+            (enemigos.copy().filter({e => e.image() == "enemigoPesado.png"})).forEach({enemigo => enemigo.ataque()})
         })
 
         game.onTick(100, "moverProyectiles", {
-            proyectiles.forEach({p => p.avanzar() ; p.comprobarLimiteMapa()})
+            proyectiles.copy().forEach({p => p.avanzar() ; p.comprobarLimiteMapa()})
         })
 
         // Programar aparición del jefe 1 a los 35 segundos
@@ -103,7 +109,7 @@ object nivel1 inherits Nivel(imagenFondo = "videoMapa1.gif", musicaFondo = "musi
 // =============================================================================
 // NIVEL 2: Asedio Aéreo Avanzado (Solo Rápidos, Pesados, Bombarderos y Jefe 2)
 // =============================================================================
-object nivel2 inherits Nivel(imagenFondo = "mapa2.png", musicaFondo = "musicaNivel1.mp3") {
+object nivel2 inherits Nivel(imagenFondo = "videoMapa2.gif", musicaFondo = "musicaNivel1.mp3") {
 
     override method iniciarSpawners() {
         // Cazas Rápidos con mayor frecuencia (cada 2.5s)
@@ -114,7 +120,7 @@ object nivel2 inherits Nivel(imagenFondo = "mapa2.png", musicaFondo = "musicaNiv
         })
 
         game.onTick(400, "moverRapidos2", {
-            (enemigos.filter({e => e.image() == "enemigoRapido.png"})).forEach({e => e.movimiento() ; e.comprobarLimiteMapa()})
+            (enemigos.copy().filter({e => e.image() == "enemigoRapido.png"})).forEach({e => e.movimiento() ; e.comprobarLimiteMapa()})
         })
 
         // Cazas Pesados estándar (cada 6s)
@@ -125,11 +131,11 @@ object nivel2 inherits Nivel(imagenFondo = "mapa2.png", musicaFondo = "musicaNiv
         })
 
         game.onTick(2500, "moverPesados2", {
-            (enemigos.filter({e => e.image() == "enemigoPesado.png"})).forEach({e => e.movimiento() ; e.comprobarLimiteMapa()})
+            (enemigos.copy().filter({e => e.image() == "enemigoPesado.png"})).forEach({e => e.movimiento() ; e.comprobarLimiteMapa()})
         })
 
         game.onTick(3000, "disparoPesados2", {
-            (enemigos.filter({e => e.image() == "enemigoPesado.png"})).forEach({e => e.ataque()})
+            (enemigos.copy().filter({e => e.image() == "enemigoPesado.png"})).forEach({e => e.ataque()})
         })
 
         // NUEVO: Bombarderos Pesados con Proyectil Explosivo en racimo (cada 7s)
@@ -140,16 +146,16 @@ object nivel2 inherits Nivel(imagenFondo = "mapa2.png", musicaFondo = "musicaNiv
         })
 
         game.onTick(2800, "moverBombarderos2", {
-            (enemigos.filter({e => e.image() == "enemigoExplosivo.png"})).forEach({e => e.movimiento() ; e.comprobarLimiteMapa()})
+            (enemigos.copy().filter({e => e.image() == "enemigoExplosivo.png"})).forEach({e => e.movimiento() ; e.comprobarLimiteMapa()})
         })
 
         game.onTick(3500, "disparoBombarderos2", {
-            (enemigos.filter({e => e.image() == "enemigoExplosivo.png"})).forEach({e => e.ataque()})
+            (enemigos.copy().filter({e => e.image() == "enemigoExplosivo.png"})).forEach({e => e.ataque()})
         })
 
         // Mover todos los proyectiles (aliados, en cono, bombas y esquirlas)
         game.onTick(100, "moverProyectiles", {
-            proyectiles.forEach({p => p.avanzar() ; p.comprobarLimiteMapa()})
+            proyectiles.copy().forEach({p => p.avanzar() ; p.comprobarLimiteMapa()})
         })
 
         // Programar aparición del Jefe Final de Nivel 2 a los 40 segundos

@@ -11,10 +11,13 @@ object jugador {
   var property puntos = 0
   var property image = "jugadorBase.png"
   var property inmune = false
+  var property puedeDisparar = true
   
   method interactuarCon(otro) {
     otro.interactuarConJugador(self)
   }
+  
+  method interactuarConJugador(jugador) {}
   
   method interactuarConEnemigo(enemigo) {
     self.recibirDanio(enemigo.danio())
@@ -28,9 +31,13 @@ object jugador {
   method interactuarConProyectil(proyectil) {} // no hace nada
   
   method ataque() {
-    const proyectil = new Proyectiles(position = self.position(), danio = 1)
-    proyectil.spawnDisparo(self.position())
-    nivelManager.actual().proyectiles().add(proyectil)
+    if (puedeDisparar) {
+      puedeDisparar = false
+      game.schedule(150, { puedeDisparar = true })
+      const proyectil = new Proyectiles(position = self.position(), danio = 1)
+      proyectil.spawnDisparo(self.position())
+      nivelManager.actual().proyectiles().add(proyectil)
+    }
   }
   
   method recibirDanio(danio) {

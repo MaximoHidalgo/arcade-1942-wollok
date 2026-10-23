@@ -15,38 +15,39 @@ object pantallas inherits ObjetoPasivo {
      
     method pantallaInfoControles() {
         image = "Controles.png"
-        game.schedule(6000,{self.animacionCargando()})
+        game.schedule(5000, { self.animacionCargando() })
     }
 
     method pantallaDeInicio() {
         image = "Inicio2.png"
         game.sound("sonidoStart.wav").play()
-        game.schedule(700,{self.pantallaInfoControles()})
+        game.schedule(700, { self.pantallaInfoControles() })
     }
 
     method animacionCargando() {
         juego.estado(cargando)
         self.image("cargando.gif")
+        if (!game.allVisuals().contains(self)) {
+            game.addVisual(self)
+        }
         musicaDeFondo.play("audioCargando.wav")
-        game.schedule(6800, {self.limpiar()})
-    }
-
-    method limpiar() {
-        game.allVisuals().forEach({visual => game.removeVisual(visual)})
-        self.abandonarCargando()
+        game.schedule(3500, { self.abandonarCargando() })
     }
 
     method abandonarCargando() {
+        if (game.allVisuals().contains(self)) {
+            game.removeVisual(self)
+        }
         nivelManager.iniciarSigNivel()
-        game.removeVisual(self)
     }
 
     method pantallaFinalizacion(imagen, musica) {
         nivelManager.limpieza()
         game.sound(musica).play()
-        game.allVisuals().forEach({visual => game.removeVisual(visual)})
         image = imagen
-        game.addVisual(self)
-        game.schedule(2000,{game.stop()})
+        if (!game.allVisuals().contains(self)) {
+            game.addVisual(self)
+        }
+        game.schedule(5000, { game.stop() })
     }
 }
