@@ -33,17 +33,24 @@ object jugador {
   }
   
   method recibirDanio(danio) {
-    if (self.inmune()) return vidas// Si está inmune, ignora el golpe
+    if (self.inmune()) return vidas // Si esta inmune, ignora el golpe
     vidas = vidas - danio
-    
 
-    if (vidas == 2) {cantVida.image("corazones2.png") game.sound("impactoJugador.wav").play()} 
-    if (vidas == 1) {cantVida.image("corazones1.png") game.sound("impactoJugador.wav").play()}
-    if (vidas <= 0) {cantVida.image("corazones0.png")
+    if (vidas == 2) {
+      cantVida.image("corazones2.png")
+      game.sound("impactoJugador.wav").play()
+    } 
+    if (vidas == 1) {
+      cantVida.image("corazones1.png")
+      game.sound("impactoJugador.wav").play()
+    }
+    if (vidas <= 0) {
+      cantVida.image("corazones0.png")
       self.morir()
+      return 0
     }
     
-    // Activar inmunidad temporal (3,5 segundos)
+    // Activar inmunidad temporal (3,5 segundos) solo si sigue con vida
     self.inmune(true)
     self.parpadear(6)
     game.schedule(3500, {self.inmune(false)})

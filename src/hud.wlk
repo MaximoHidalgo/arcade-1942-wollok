@@ -36,9 +36,13 @@ object cantPuntos inherits ObjetoPasivo {
     var property digits = []
     var property position = game.at(6,7)
     var property image = "puntajeBase.png"
+    var property inicializado = false
 
     method actualizar(puntos) {
-        game.removeVisual(self)
+        if (!inicializado) {
+            game.removeVisual(self)
+            inicializado = true
+        }
         const texto = puntos.toString()
 
         digits.forEach({ d => game.removeVisual(d) })

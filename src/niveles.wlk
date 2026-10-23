@@ -57,7 +57,6 @@ object nivel1 inherits Nivel(imagenFondo = "videoMapa1.gif", musicaFondo = "musi
             const enemigoRapido = new Enemigo(position = game.at(0.randomUpTo(game.width()),7), image = "enemigoRapido.png")
             enemigoRapido.spawnEnemigo()
             enemigos.add(enemigoRapido)
-            (enemigos.filter({e => e.vidas() == 2})).forEach({enemigo => enemigo.movimiento() ; enemigo.comprobarLimiteMapa()})
         })
 
         game.onTick(500, "moverEnemigoRapido", {
@@ -75,11 +74,11 @@ object nivel1 inherits Nivel(imagenFondo = "videoMapa1.gif", musicaFondo = "musi
         }) 
 
         game.onTick(4000, "disparoEnemigoPesado",{
-            (enemigos.filter({e => e.vidas() == 2})).forEach({enemigo => enemigo.ataque()})
+            (enemigos.filter({e => e.image() == "enemigoPesado.png"})).forEach({enemigo => enemigo.ataque()})
         })
 
         game.onTick(100, "moverProyectiles", {
-            proyectiles.forEach({p =>p.avanzar()p.comprobarLimiteMapa()})
+            proyectiles.forEach({p => p.avanzar() ; p.comprobarLimiteMapa()})
         })
 
         // Programar aparición del jefe
@@ -89,7 +88,6 @@ object nivel1 inherits Nivel(imagenFondo = "videoMapa1.gif", musicaFondo = "musi
             game.removeTickEvent("spawnEnemigosRapidos")
             game.removeTickEvent("spawnEnemigoPesado")
             game.removeTickEvent("disparoEnemigoPesado")
-            game.schedule(10000, {game.removeTickEvent("moverProyectilesEnemigos")})
             game.schedule(10000, {game.removeTickEvent("moverEnemigo")})
             game.schedule(10000, {game.removeTickEvent("moverEnemigoRapido")})
             game.schedule(18000, {game.removeTickEvent("moverEnemigoPesado")})
